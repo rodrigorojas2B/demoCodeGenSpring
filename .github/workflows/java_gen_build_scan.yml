@@ -681,6 +681,31 @@ jobs:
             cp "$f" "$destino"
           done
 
+      - name: Preparar carpeta para análisis Sonar del código mejorado
+        working-directory: repositorio-base
+        run: |
+          echo "📦 Preparando archivos mejorados para Sonar..."
+          mkdir -p src-analizado/main/java
+          find src/main/java -name '*.mejorado.java' | while read file; do
+            relpath="${file#src/main/java/}"
+            destino="src-analizado/main/java/${relpath%.mejorado.java}.java"
+            mkdir -p "$(dirname "$destino")"
+            cp "$file" "$destino"
+            echo "✅ Copiado: $file -> $destino"
+          done
+
+      - name: Verificar archivos mejorados
+        working-directory: repositorio-base
+        run: |
+          echo "📁 Verificando contenido de src-analizado/main/java:"
+          if [ -d src-analizado/main/java ]; then
+            find src-analizado/main/java -type f
+          else
+            echo "⛔ La carpeta src-analizado/main/java no existe. Deteniendo ejecución."
+            exit 1
+          fi
+
+
       - name: Análisis con SonarCloud del código mejorado
         working-directory: repositorio-base
         env:
