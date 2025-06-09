@@ -1,0 +1,21 @@
+--- ANÁLISIS DE CLASES EXISTENTES ---
+
+| Clase Java | Package | Clasificación | Motivo |
+|------------|---------|----------------|--------|
+| Employee | test.core.api.model | REUTILIZABLE-AS-IS | Contiene atributo `gender` que se necesita para la validación |
+| EmployeeRepository | test.core.api.repository | REUTILIZABLE-AS-IS | Se utiliza para operaciones de base de datos, incluyendo la eliminación |
+| EmployeeCoreApiApplication | test.core.api | REUTILIZABLE-AS-IS | Clase principal de la aplicación, no requiere cambios |
+| CannotDeleteEmployeeException | test.core.api.exception | NUEVA | Se necesita para lanzar una excepción cuando se intenta eliminar un empleado femenino |
+| EmployeeService | test.core.api.service | MODIFICABLE | Se necesita para agregar la validación antes de eliminar |
+| EmployeeServiceImpl | test.core.api.service.impl | MODIFICABLE | Implementación del servicio donde se agregará la validación |
+| EmployeeServiceTest | test.core.api.service | NUEVA | Se necesita para probar la nueva validación |
+
+--- PLAN DE MODIFICACIÓN ---
+
+1. Crear la nueva excepción `CannotDeleteEmployeeException` en el paquete `test.core.api.exception`. Esta excepción se lanzará cuando se intente eliminar un empleado femenino.
+
+2. Modificar la interfaz `EmployeeService` en el paquete `test.core.api.service` para incluir un nuevo método `deleteEmployee(Long id)` que lanzará la excepción `CannotDeleteEmployeeException`.
+
+3. Modificar la clase `EmployeeServiceImpl` en el paquete `test.core.api.service.impl` para implementar el nuevo método `deleteEmployee(Long id)`. Este método primero verificará el género del empleado y lanzará la excepción `CannotDeleteEmployeeException` si el empleado es femenino. Si el empleado no es femenino, se llamará al método `deleteById(id)` del repositorio para eliminar al empleado.
+
+4. Crear la nueva clase de prueba `EmployeeServiceTest` en el paquete `test.core.api.service`. Esta clase contendrá pruebas unitarias para el nuevo método `deleteEmployee(Long id)`. Las pruebas verificarán que se lanza la excepción `CannotDeleteEmployeeException` cuando se intenta eliminar un empleado femenino y que se puede eliminar un empleado no femenino.

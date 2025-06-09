@@ -1,0 +1,36 @@
+{
+  "id": "chatcmpl-BgYcKLkxEpl1jsxld21e6DP0Qf9jy",
+  "object": "chat.completion",
+  "created": 1749482544,
+  "model": "gpt-4-0613",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "--- CÓDIGO JAVA ---\n\n```java\npackage test.core.api.exception;\n\npublic class CannotDeleteEmployeeException extends RuntimeException {\n    public CannotDeleteEmployeeException(String message) {\n        super(message);\n    }\n}\n```\n\n```java\npackage test.core.api.service;\n\nimport test.core.api.exception.CannotDeleteEmployeeException;\n\npublic interface EmployeeService {\n    // ... otros métodos existentes ...\n\n    void deleteEmployee(Long id) throws CannotDeleteEmployeeException;\n}\n```\n\n```java\npackage test.core.api.service.impl;\n\nimport org.springframework.beans.factory.annotation.Autowired;\nimport org.springframework.stereotype.Service;\nimport test.core.api.exception.CannotDeleteEmployeeException;\nimport test.core.api.model.Employee;\nimport test.core.api.repository.EmployeeRepository;\nimport test.core.api.service.EmployeeService;\n\n@Service\npublic class EmployeeServiceImpl implements EmployeeService {\n\n    @Autowired\n    private EmployeeRepository employeeRepository;\n\n    // ... otros métodos existentes ...\n\n    @Override\n    public void deleteEmployee(Long id) throws CannotDeleteEmployeeException {\n        Employee employee = employeeRepository.findById(id).orElse(null);\n        if (employee != null && \"Femenino\".equalsIgnoreCase(employee.getGender())) {\n            throw new CannotDeleteEmployeeException(\"No se puede eliminar un empleado femenino.\");\n        }\n        employeeRepository.deleteById(id);\n    }\n}\n```\n\n```java\npackage test.core.api.service;\n\nimport org.junit.jupiter.api.Test;\nimport org.junit.jupiter.api.extension.ExtendWith;\nimport org.mockito.InjectMocks;\nimport org.mockito.Mock;\nimport org.mockito.junit.jupiter.MockitoExtension;\nimport test.core.api.exception.CannotDeleteEmployeeException;\nimport test.core.api.model.Employee;\nimport test.core.api.repository.EmployeeRepository;\nimport test.core.api.service.impl.EmployeeServiceImpl;\n\nimport java.util.Optional;\n\nimport static org.junit.jupiter.api.Assertions.assertThrows;\nimport static org.mockito.Mockito.*;\n\n@ExtendWith(MockitoExtension.class)\npublic class EmployeeServiceTest {\n\n    @Mock\n    private EmployeeRepository employeeRepository;\n\n    @InjectMocks\n    private EmployeeServiceImpl employeeService;\n\n    @Test\n    public void testDeleteEmployee_Female() {\n        Employee employee = new Employee();\n        employee.setGender(\"Femenino\");\n        when(employeeRepository.findById(anyLong())).thenReturn(Optional.of(employee));\n\n        assertThrows(CannotDeleteEmployeeException.class, () -> employeeService.deleteEmployee(1L));\n\n        verify(employeeRepository, times(1)).findById(anyLong());\n        verify(employeeRepository, times(0)).deleteById(anyLong());\n    }\n\n    @Test\n    public void testDeleteEmployee_NotFemale() {\n        Employee employee = new Employee();\n        employee.setGender(\"Masculino\");\n        when(employeeRepository.findById(anyLong())).thenReturn(Optional.of(employee));\n\n        employeeService.deleteEmployee(1L);\n\n        verify(employeeRepository, times(1)).findById(anyLong());\n        verify(employeeRepository, times(1)).deleteById(anyLong());\n    }\n}\n```",
+        "refusal": null,
+        "annotations": []
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 1146,
+    "completion_tokens": 575,
+    "total_tokens": 1721,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "audio_tokens": 0,
+      "accepted_prediction_tokens": 0,
+      "rejected_prediction_tokens": 0
+    }
+  },
+  "service_tier": "default",
+  "system_fingerprint": null
+}
