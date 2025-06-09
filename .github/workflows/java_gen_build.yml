@@ -44,6 +44,14 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y jq unzip openjdk-17-jdk maven
 
+      - name: Limpieza previa de clases generadas (si existen)
+        run: |
+          cd repositorio-base
+          echo "🧹 Eliminando clases generadas residuales..."
+          rm -rf src/main/java/ai/generated
+          rm -rf src/test/java/ai/generated
+        
+
       - name: Indexar y agregar contenido de clases Java existentes al prompt
         run: |
           cd repositorio-base
