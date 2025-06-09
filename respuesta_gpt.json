@@ -1,0 +1,36 @@
+{
+  "id": "chatcmpl-BgYMImjkZrl6v4CzkS1zanuIA1Q4F",
+  "object": "chat.completion",
+  "created": 1749481550,
+  "model": "gpt-4-0613",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "--- CÓDIGO JAVA ---\n\n```java\npackage test.core.api.service;\n\npublic interface EmployeeService {\n    void deleteEmployee(Long id);\n}\n```\n\n```java\npackage test.core.api.service.impl;\n\nimport org.springframework.beans.factory.annotation.Autowired;\nimport org.springframework.stereotype.Service;\nimport test.core.api.exception.CannotDeleteFemaleEmployeeException;\nimport test.core.api.model.Employee;\nimport test.core.api.repository.EmployeeRepository;\nimport test.core.api.service.EmployeeService;\n\n@Service\npublic class EmployeeServiceImpl implements EmployeeService {\n\n    private final EmployeeRepository employeeRepository;\n\n    @Autowired\n    public EmployeeServiceImpl(EmployeeRepository employeeRepository) {\n        this.employeeRepository = employeeRepository;\n    }\n\n    @Override\n    public void deleteEmployee(Long id) {\n        Employee employee = employeeRepository.findById(id).orElseThrow(() -> new IllegalArgumentException(\"Invalid employee Id:\" + id));\n        if (\"Femenino\".equals(employee.getGender())) {\n            throw new CannotDeleteFemaleEmployeeException(\"Cannot delete female employee with id \" + id);\n        }\n        employeeRepository.delete(employee);\n    }\n}\n```\n\n```java\npackage test.core.api.exception;\n\npublic class CannotDeleteFemaleEmployeeException extends RuntimeException {\n\n    public CannotDeleteFemaleEmployeeException(String message) {\n        super(message);\n    }\n}\n```\n\n```java\npackage test.core.api;\n\nimport org.springframework.beans.factory.annotation.Autowired;\nimport org.springframework.boot.CommandLineRunner;\nimport org.springframework.boot.SpringApplication;\nimport org.springframework.boot.autoconfigure.SpringBootApplication;\nimport test.core.api.service.EmployeeService;\n\n@SpringBootApplication\npublic class EmployeeCoreApiApplication implements CommandLineRunner {\n\n    private final EmployeeService employeeService;\n\n    @Autowired\n    public EmployeeCoreApiApplication(EmployeeService employeeService) {\n        this.employeeService = employeeService;\n    }\n\n    public static void main(String[] args) {\n        SpringApplication.run(EmployeeCoreApiApplication.class, args);\n    }\n\n    @Override\n    public void run(String... args) throws Exception {\n        // Existing logic here...\n\n        // Start of AI modification\n        // Use EmployeeService to delete employees instead of EmployeeRepository\n        employeeService.deleteEmployee(1L);\n        // End of AI modification\n    }\n}\n```\n\n```java\npackage test.core.api.service.impl;\n\nimport org.junit.jupiter.api.Test;\nimport org.mockito.InjectMocks;\nimport org.mockito.Mock;\nimport org.mockito.Mockito;\nimport org.mockito.junit.jupiter.MockitoExtension;\nimport org.junit.jupiter.api.extension.ExtendWith;\nimport test.core.api.exception.CannotDeleteFemaleEmployeeException;\nimport test.core.api.model.Employee;\nimport test.core.api.repository.EmployeeRepository;\n\nimport java.util.Optional;\n\nimport static org.junit.jupiter.api.Assertions.assertThrows;\nimport static org.mockito.Mockito.*;\n\n@ExtendWith(MockitoExtension.class)\npublic class EmployeeServiceTest {\n\n    @Mock\n    private EmployeeRepository employeeRepository;\n\n    @InjectMocks\n    private EmployeeServiceImpl employeeService;\n\n    @Test\n    public void testDeleteFemaleEmployee() {\n        Employee employee = new Employee();\n        employee.setId(1L);\n        employee.setGender(\"Femenino\");\n        when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));\n\n        assertThrows(CannotDeleteFemaleEmployeeException.class, () -> {\n            employeeService.deleteEmployee(1L);\n        });\n\n        verify(employeeRepository, never()).delete(employee);\n    }\n\n    @Test\n    public void testDeleteNonFemaleEmployee() {\n        Employee employee = new Employee();\n        employee.setId(1L);\n        employee.setGender(\"Masculino\");\n        when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));\n\n        employeeService.deleteEmployee(1L);\n\n        verify(employeeRepository, times(1)).delete(employee);\n    }\n}\n```",
+        "refusal": null,
+        "annotations": []
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 1130,
+    "completion_tokens": 728,
+    "total_tokens": 1858,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "audio_tokens": 0,
+      "accepted_prediction_tokens": 0,
+      "rejected_prediction_tokens": 0
+    }
+  },
+  "service_tier": "default",
+  "system_fingerprint": null
+}
