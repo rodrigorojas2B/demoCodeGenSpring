@@ -583,6 +583,9 @@ jobs:
           jq -r '.issues[].component' reporte_original.json | sort -u > archivos_afectados.txt
           echo "📄 Archivos con problemas:"
           cat archivos_afectados.txt
+          mkdir -p repositorio-base
+          mv archivos_afectados.txt repositorio-base/
+          
 
       - name: Llamar a OpenAI por cada archivo afectado
         working-directory: repositorio-base
