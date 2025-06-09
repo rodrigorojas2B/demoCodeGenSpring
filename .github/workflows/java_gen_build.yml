@@ -55,44 +55,49 @@ jobs:
       - name: Indexar y agregar contenido de clases Java existentes al prompt
         run: |
           cd repositorio-base
-
+      
           echo "📁 Buscando clases Java..."
           find src/main/java -type f -name "*.java" > clases_existentes.txt
-
+      
           if [ ! -s clases_existentes.txt ]; then
             echo "❌ No se encontraron archivos .java. Abortando."
             exit 1
           fi
-
+      
+          echo "📦 Clases detectadas:"
+          cat clases_existentes.txt
+      
           echo -e "\n\n--- HISTORIA DE USUARIO ---" > entrada_gpt.txt
           cat "${{ steps.historia.outputs.ruta }}" >> entrada_gpt.txt
-
+      
+          echo -e "\n\n--- CLASES DISPONIBLES EN EL PROYECTO ---" >> entrada_gpt.txt
+          cat clases_existentes.txt | sed 's|.*/||' | sed 's|\.java||' >> entrada_gpt.txt
+      
           echo -e "\n\n--- CÓDIGO EXISTENTE DEL PROYECTO ---" >> entrada_gpt.txt
-
+      
           while read -r clase; do
             echo -e "\n\n// Archivo: $clase\n" >> entrada_gpt.txt
-
-            # Validación fuerte: si el archivo contiene '// Other methods...', aborta
+      
             if grep -q '// Other methods' "$clase"; then
               echo "⛔ El archivo $clase contiene '// Other methods...'. Reemplázalo por el código real antes de continuar."
               exit 1
             fi
-
+      
             cat "$clase" >> entrada_gpt.txt
           done < clases_existentes.txt
-
+      
           cat <<'EOF' >> entrada_gpt.txt
-
+      
           --- ANÁLISIS DE CLASES EXISTENTES ---
           Genera una tabla Markdown como esta:
-
+      
           | Clase Java | Package | Clasificación | Motivo |
           |------------|---------|----------------|--------|
           | Employee | com.example.EmployeeCoreApi.model | REUTILIZABLE-AS-IS | Contiene atributo `gender` |
           | EmployeeServiceImpl | com.example.EmployeeCoreApi.service.impl | MODIFICABLE | Debe validar antes de borrar |
           | CannotDeleteEmployeeException | com.example.EmployeeCoreApi.exception | NUEVA | Requerida para lanzar excepción |
           | EmployeeServiceImplTest | com.example.EmployeeCoreApi.service.impl | NUEVA | Pruebas unitarias de validación |
-
+      
           --- INSTRUCCIONES DE MODIFICACIÓN ---
           - No eliminar ni reemplazar lógica existente.
           - Si se modifica un método, incluirlo completo con el nuevo código y lo que ya tenía.
@@ -101,11 +106,12 @@ jobs:
           - NO repetir clases ya existentes si no cambian.
           - NO eliminar los métodos existentes a menos que sea necesario
           - NO reemplazar métodos u otro contenido de las clases existentes por comentarios entre líneas
-
+      
           --- CÓDIGO A GENERAR ---
           Devuelve solo clases Java válidas. Cada bloque debe comenzar con `package ...`.
           Incluye los tests JUnit5 en el mismo formato si aplica.
           EOF
+      
 
       - name: Llamar a OpenAI para diagnóstico (solo análisis y clasificación)
         env:
