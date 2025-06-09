@@ -262,10 +262,14 @@ jobs:
           csplit --quiet --prefix=clase_ --suffix-format=%02d.java clases_generadas.java "/^package /" {*}
       
           echo "📂 Procesando archivos clase_*.java..."
+          echo "🗂️ Archivos generados antes de moverlos:"
+          ls -l clase_*.java
 
           i=1
           for file in clase_*.java; do
             echo "🔍 Analizando archivo: $file"
+            echo "📄 Guardando clase $class_name en $path/$class_name.java"
+
 
             # Validar que el archivo contiene declaración de paquete válida
             if ! grep -qE '^\s*package\s+[a-zA-Z0-9_.]+;' "$file"; then
