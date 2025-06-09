@@ -636,6 +636,7 @@ jobs:
           done
 
       - name: Análisis con SonarCloud del código mejorado
+        working-directory: repositorio-base
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
@@ -702,47 +703,8 @@ jobs:
             echo "MEJORA_SIGNIFICATIVA=false" >> $GITHUB_ENV
             echo "⛔ Las severidades aumentaron ($puntaje_antes → $puntaje_despues)"
           fi
-
-
-      - name: Commit automático si hay mejora significativa
-        if: env.MEJORA_SIGNIFICATIVA == 'true'
-        env:
-          GH_PAT: ${{ secrets.GH_PAT }}
-        run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-          git remote set-url origin https://x-access-token:${GH_PAT}@github.com/${{ github.repository }}.git
-
-          git fetch origin
-          git pull --rebase origin main
-
-          iter_dir="ci-reportes/iteracion-${ITERACION_ACTUAL}"
-          mkdir -p "$iter_dir"
-          cp reporte_original.json "$iter_dir/"
-          cp reporte_mejorado.json "$iter_dir/"
-          cp reportes_ci/* "$iter_dir/" || true
-
-          git add ci-reportes/
-
-          MEJORADOS=$(find src -type f -name "*.mejorado.java")
-
-          if [ -n "$MEJORADOS" ]; then
-            echo "$MEJORADOS" | xargs git add
-          else
-            echo "⚠️ No se encontraron archivos .mejorado.java para agregar"
-          fi
-
-
-          if git diff --cached --quiet; then
-            echo "⛔ No hay cambios para commitear, se omite push"
-          else
-            git commit -m "🤖 Iteración ${ITERACION_ACTUAL}: mejora aplicada con reducción de severidades"
-            git push origin main
-          fi
-        
     
       - name: Commit y push de la nueva funcionalidad (si todo compila)
-        if: success()
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
         run: |
