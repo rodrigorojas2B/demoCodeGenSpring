@@ -269,6 +269,8 @@ jobs:
           for file in clase_*.java; do
             echo "🔍 Analizando archivo: $file"
             echo "📄 Guardando clase $class_name en $path/$class_name.java"
+            echo "🔍 Contenido de $file:"
+            cat "$file"
 
 
             # Validar que el archivo contiene declaración de paquete válida
