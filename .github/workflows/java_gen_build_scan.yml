@@ -727,12 +727,16 @@ jobs:
             -Dsonar.login=$SONAR_TOKEN
         
 
-      - name: Guardar reporte mejorado
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: Mostrar respuesta cruda del análisis mejorado
+        working-directory: repositorio-base
         run: |
+          echo "🛠️ Guardando respuesta de SonarCloud (código mejorado)..."
           curl -s "https://sonarcloud.io/api/issues/search?componentKeys=rodrigorojasg_testSpring_gpt&resolved=false" \
             -H "Authorization: Bearer $SONAR_TOKEN" > reporte_mejorado.json
+      
+          echo "📂 Contenido del reporte:"
+          cat reporte_mejorado.json
+          
 
       - name: Comparar resultados de análisis
         id: comparar_errores
