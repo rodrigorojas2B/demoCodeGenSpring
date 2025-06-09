@@ -509,7 +509,39 @@ jobs:
             exit 1
           fi
       
+      - name: Análisis original con SonarCloud
+        if: success()  # Solo si la compilación fue exitosa
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          mvn sonar:sonar \
+            -Dsonar.projectKey=rodrigorojasg_testSpring \
+            -Dsonar.organization=rodrigorojasg \
+            -Dsonar.projectName="testSpring Original" \
+            -Dsonar.sources=src/main/java \
+            -Dsonar.tests=src/test \
+            -Dsonar.java.binaries=target/classes \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.login=$SONAR_TOKEN
       
+      - name: Guardar reporte original
+        if: success()
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          echo "🗃️ Obteniendo reporte de issues desde SonarCloud..."
+          curl -s "https://sonarcloud.io/api/issues/search?componentKeys=rodrigorojasg_testSpring&resolved=false" \
+            -H "Authorization: Bearer $SONAR_TOKEN" > reporte_original.json
+      
+      - name: Detectar archivos con errores
+        if: success()
+        run: |
+          echo "🔍 Detectando archivos afectados..."
+          jq -r '.issues[].component' reporte_original.json | sort -u > archivos_afectados.txt
+          echo "📄 Archivos con problemas:"
+          cat archivos_afectados.txt
+      
+    
       - name: Commit y push de la nueva funcionalidad (si todo compila)
         if: success()
         env:
