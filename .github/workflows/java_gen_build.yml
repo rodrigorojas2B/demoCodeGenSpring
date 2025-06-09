@@ -402,20 +402,13 @@ jobs:
       
             DIAG_CONTENT+=$'\n\n--- CÓDIGO ACTUAL CON ERROR ---\n'
       
-            if compgen -G "src/main/java/ai/generated/*.java" > /dev/null; then
-              for file in src/main/java/ai/generated/*.java; do
+            for file in $(find src/main/java -name "*.java"); do
+              if grep -q "public class " "$file"; then
                 DIAG_CONTENT+=$'\n\n--- ARCHIVO: '"$file"$' ---\n'
                 DIAG_CONTENT+="$(cat "$file")"
-              done
-            else
-              for file in $(find src/main/java -name "*.java"); do
-                if grep -q "public class " "$file"; then
-                  DIAG_CONTENT+=$'\n\n--- ARCHIVO: '"$file"$' ---\n'
-                  DIAG_CONTENT+="$(cat "$file")"
-                  break
-                fi
-              done
-            fi
+                break
+              fi
+            done
       
             DIAG_CONTENT+=$'\n\n--- INSTRUCCIONES ---\n'
             DIAG_CONTENT+="Eres un experto compilador de Java. Analiza el error y entrega un plan de corrección estructurado. "
@@ -426,8 +419,8 @@ jobs:
               '{
                 model: "gpt-4",
                 messages: [
-                  { role: "system", content: "Eres un experto compilador Java. Entrega solo un plan de corrección." },
-                  { role: "user", content: $diag }
+                  { "role": "system", "content": "Eres un experto compilador Java. Entrega solo un plan de corrección." },
+                  { "role": "user", "content": $diag }
                 ],
                 temperature: 0.2
               }' > payload_diagnostico_errores.json
@@ -449,20 +442,13 @@ jobs:
       
             CODIGO_CONTENT+=$'\n\n--- CÓDIGO ACTUAL CON ERROR ---\n'
       
-            if compgen -G "src/main/java/ai/generated/*.java" > /dev/null; then
-              for file in src/main/java/ai/generated/*.java; do
+            for file in $(find src/main/java -name "*.java"); do
+              if grep -q "public class " "$file"; then
                 CODIGO_CONTENT+=$'\n\n--- ARCHIVO: '"$file"$' ---\n'
                 CODIGO_CONTENT+="$(cat "$file")"
-              done
-            else
-              for file in $(find src/main/java -name "*.java"); do
-                if grep -q "public class " "$file"; then
-                  CODIGO_CONTENT+=$'\n\n--- ARCHIVO: '"$file"$' ---\n'
-                  CODIGO_CONTENT+="$(cat "$file")"
-                  break
-                fi
-              done
-            fi
+                break
+              fi
+            done
       
             CODIGO_CONTENT+=$'\n\n--- INSTRUCCIONES ---\n'
             CODIGO_CONTENT+="Corrige el código entregado según el plan anterior. Devuelve solo código Java válido. "
@@ -473,8 +459,8 @@ jobs:
               '{
                 model: "gpt-4",
                 messages: [
-                  { role: "system", content: "Eres un generador de código Java. Devuelve solo clases completas y corregidas." },
-                  { role: "user", content: $corr }
+                  { "role": "system", "content": "Eres un generador de código Java. Devuelve solo clases completas y corregidas." },
+                  { "role": "user", "content": $corr }
                 ],
                 temperature: 0.3
               }' > payload_codigo_corregido.json
@@ -497,19 +483,14 @@ jobs:
             sed -i '1,/^package /{/^package /!d}' clases_generadas.java
             csplit --quiet --prefix=clase_ --suffix-format=%02d.java clases_generadas.java "/^package /" {*}
       
-            mkdir -p src/main/java/ai/generated
-            mkdir -p src/test/java/ai/generated
-      
             for file in clase_*.java; do
               if ! grep -qE 'package\s+[a-zA-Z0-9_.]+;' "$file"; then rm "$file"; continue; fi
               if ! grep -qE '\b(class|interface|enum)\b' "$file"; then rm "$file"; continue; fi
+              pkg=$(grep -oP '^package\s+\K[\w.]+' "$file")
+              path="src/main/java/$(echo $pkg | tr '.' '/')"
+              mkdir -p "$path"
               class_name=$(grep -oP 'public\s+(class|interface|enum)\s+\K\w+' "$file" | head -n 1)
-              [ -z "$class_name" ] && rm "$file" && continue
-              if grep -q '@Test' "$file"; then
-                mv "$file" "src/test/java/ai/generated/${class_name}.java"
-              else
-                mv "$file" "src/main/java/ai/generated/${class_name}.java"
-              fi
+              mv "$file" "$path/$class_name.java"
             done
       
             intentos=$((intentos+1))
@@ -519,7 +500,7 @@ jobs:
             echo "❌ Se alcanzó el máximo de intentos sin éxito"
             exit 1
           fi
-        
+      
       
       - name: Commit y push de la nueva funcionalidad (si todo compila)
         if: success()
