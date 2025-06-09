@@ -106,6 +106,9 @@ jobs:
           - NO repetir clases ya existentes si no cambian.
           - NO eliminar los métodos existentes a menos que sea necesario
           - NO reemplazar métodos u otro contenido de las clases existentes por comentarios entre líneas
+          - Solo considerar como existente una clase si está listada explícitamente en "CLASES DISPONIBLES EN EL PROYECTO".
+          - Si una clase no aparece listada, asumir que es NUEVA.
+          - Si una clase herada de otra clase o importa una interfaz propia del proyecto asegúrate que esta esté entre las clases existentes o genera el código respectivo de no existir previamente
       
           --- CÓDIGO A GENERAR ---
           Devuelve solo clases Java válidas. Cada bloque debe comenzar con `package ...`.
