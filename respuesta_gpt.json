@@ -1,0 +1,36 @@
+{
+  "id": "chatcmpl-BgfCDMcjul6YMm9Q1QOKA7FRJwjgN",
+  "object": "chat.completion",
+  "created": 1749507833,
+  "model": "gpt-4-0613",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "package test.core.api.repository;\n\nimport org.springframework.data.jpa.repository.JpaRepository;\nimport org.springframework.data.jpa.repository.Query;\nimport org.springframework.data.repository.query.Param;\nimport test.core.api.model.Employee;\n\nimport java.util.Date;\nimport java.util.List;\n\npublic interface EmployeeRepository extends JpaRepository<Employee, Long> {\n\n    // Start of AI changes\n    @Query(\"SELECT e FROM Employee e WHERE e.birthDate < :date\")\n    List<Employee> findEmployeesBornBefore(@Param(\"date\") Date date);\n    // End of AI changes\n}\n\npackage test.core.api.service;\n\nimport org.springframework.beans.factory.annotation.Autowired;\nimport org.springframework.stereotype.Service;\nimport test.core.api.model.Employee;\nimport test.core.api.repository.EmployeeRepository;\nimport test.core.api.exception.CannotDeleteEmployeeException;\n\nimport java.util.Calendar;\nimport java.util.List;\n\n@Service\npublic class EmployeeService {\n\n    @Autowired\n    private EmployeeRepository employeeRepository;\n\n    public void deleteEmployee(Long id) {\n        Employee employee = employeeRepository.findById(id).orElse(null);\n        if (employee != null) {\n            // Start of AI changes\n            if (\"Femenino\".equals(employee.getGender())) {\n                throw new CannotDeleteEmployeeException(\"Cannot delete female employees.\");\n            }\n            // End of AI changes\n            employeeRepository.delete(employee);\n        }\n    }\n\n    public List<Employee> getEmployeesBornBefore2000() {\n        Calendar calendar = Calendar.getInstance();\n        calendar.set(2000, Calendar.JANUARY, 1);\n        return employeeRepository.findEmployeesBornBefore(calendar.getTime());\n    }\n}\n\npackage test.core.api.controller;\n\nimport org.springframework.beans.factory.annotation.Autowired;\nimport org.springframework.http.ResponseEntity;\nimport org.springframework.web.bind.annotation.DeleteMapping;\nimport org.springframework.web.bind.annotation.GetMapping;\nimport org.springframework.web.bind.annotation.PathVariable;\nimport org.springframework.web.bind.annotation.RestController;\nimport test.core.api.service.EmployeeService;\n\n@RestController\npublic class EmployeeController {\n\n    @Autowired\n    private EmployeeService employeeService;\n\n    @DeleteMapping(\"/employees/{id}\")\n    public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {\n        employeeService.deleteEmployee(id);\n        return ResponseEntity.ok().build();\n    }\n\n    @GetMapping(\"/employees/born-before-2000\")\n    public ResponseEntity<List<Employee>> getEmployeesBornBefore2000() {\n        return ResponseEntity.ok(employeeService.getEmployeesBornBefore2000());\n    }\n}\n\npackage test.core.api.exception;\n\npublic class CannotDeleteEmployeeException extends RuntimeException {\n    public CannotDeleteEmployeeException(String message) {\n        super(message);\n    }\n}\n\npackage test.core.api.service;\n\nimport org.junit.jupiter.api.Test;\nimport org.springframework.beans.factory.annotation.Autowired;\nimport org.springframework.boot.test.context.SpringBootTest;\nimport test.core.api.exception.CannotDeleteEmployeeException;\nimport test.core.api.model.Employee;\n\nimport java.util.List;\n\nimport static org.junit.jupiter.api.Assertions.*;\n\n@SpringBootTest\npublic class EmployeeServiceTest {\n\n    @Autowired\n    private EmployeeService employeeService;\n\n    @Test\n    public void deleteEmployee_FemaleEmployee_ThrowsException() {\n        Employee femaleEmployee = new Employee();\n        femaleEmployee.setGender(\"Femenino\");\n        assertThrows(CannotDeleteEmployeeException.class, () -> employeeService.deleteEmployee(femaleEmployee.getId()));\n    }\n\n    @Test\n    public void getEmployeesBornBefore2000_ReturnsEmployees() {\n        List<Employee> employees = employeeService.getEmployeesBornBefore2000();\n        assertFalse(employees.isEmpty());\n        assertTrue(employees.stream().allMatch(e -> e.getBirthDate().getYear() < 2000));\n    }\n}\n\npackage test.core.api.controller;\n\nimport org.junit.jupiter.api.Test;\nimport org.springframework.beans.factory.annotation.Autowired;\nimport org.springframework.boot.test.context.SpringBootTest;\nimport org.springframework.boot.test.mock.mockito.MockBean;\nimport org.springframework.http.MediaType;\nimport org.springframework.test.web.servlet.MockMvc;\nimport org.springframework.test.web.servlet.setup.MockMvcBuilders;\nimport org.springframework.web.context.WebApplicationContext;\nimport test.core.api.service.EmployeeService;\n\nimport static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;\nimport static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;\nimport static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;\n\n@SpringBootTest\npublic class EmployeeControllerTest {\n\n    @Autowired\n    private WebApplicationContext webApplicationContext;\n\n    @MockBean\n    private EmployeeService employeeService;\n\n    private MockMvc mockMvc;\n\n    @Test\n    public void deleteEmployee_ValidRequest_ReturnsOk() throws Exception {\n        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();\n        mockMvc.perform(delete(\"/employees/{id}\", 1L)\n                .contentType(MediaType.APPLICATION_JSON))\n                .andExpect(status().isOk());\n    }\n\n    @Test\n    public void getEmployeesBornBefore2000_ValidRequest_ReturnsOk() throws Exception {\n        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();\n        mockMvc.perform(get(\"/employees/born-before-2000\")\n                .contentType(MediaType.APPLICATION_JSON))\n                .andExpect(status().isOk());\n    }\n}",
+        "refusal": null,
+        "annotations": []
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 1344,
+    "completion_tokens": 988,
+    "total_tokens": 2332,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "audio_tokens": 0,
+      "accepted_prediction_tokens": 0,
+      "rejected_prediction_tokens": 0
+    }
+  },
+  "service_tier": "default",
+  "system_fingerprint": null
+}

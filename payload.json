@@ -1,0 +1,14 @@
+{
+  "model": "gpt-4",
+  "messages": [
+    {
+      "role": "system",
+      "content": "Eres un asistente experto en Java y Spring Boot. Vas a recibir una clase en Java codificada en base64 y una lista de problemas de calidad detectados por SonarCloud. Tu tarea es corregir solo esos problemas, manteniendo la lógica y estructura original."
+    },
+    {
+      "role": "user",
+      "content": "Este es el código fuente en base64: cGFja2FnZSB0ZXN0LmNvcmUuYXBpLnNlcnZpY2U7CmltcG9ydCBvcmcuanVuaXQuanVwaXRlci5hcGkuVGVzdDsKaW1wb3J0IG9yZy5zcHJpbmdmcmFtZXdvcmsuYmVhbnMuZmFjdG9yeS5hbm5vdGF0aW9uLkF1dG93aXJlZDsKaW1wb3J0IG9yZy5zcHJpbmdmcmFtZXdvcmsuYm9vdC50ZXN0LmNvbnRleHQuU3ByaW5nQm9vdFRlc3Q7CmltcG9ydCB0ZXN0LmNvcmUuYXBpLmV4Y2VwdGlvbi5DYW5ub3REZWxldGVFbXBsb3llZUV4Y2VwdGlvbjsKaW1wb3J0IHRlc3QuY29yZS5hcGkubW9kZWwuRW1wbG95ZWU7CmltcG9ydCBqYXZhLnV0aWwuTGlzdDsKaW1wb3J0IHN0YXRpYyBvcmcuanVuaXQuanVwaXRlci5hcGkuQXNzZXJ0aW9ucy4qOwpAU3ByaW5nQm9vdFRlc3QKcHVibGljIGNsYXNzIEVtcGxveWVlU2VydmljZVRlc3QgewogICAgQEF1dG93aXJlZAogICAgcHJpdmF0ZSBFbXBsb3llZVNlcnZpY2UgZW1wbG95ZWVTZXJ2aWNlOwogICAgQFRlc3QKICAgIHB1YmxpYyB2b2lkIGRlbGV0ZUVtcGxveWVlX0ZlbWFsZUVtcGxveWVlX1Rocm93c0V4Y2VwdGlvbigpIHsKICAgICAgICBFbXBsb3llZSBmZW1hbGVFbXBsb3llZSA9IG5ldyBFbXBsb3llZSgpOwogICAgICAgIGZlbWFsZUVtcGxveWVlLnNldEdlbmRlcigiRmVtZW5pbm8iKTsKICAgICAgICBhc3NlcnRUaHJvd3MoQ2Fubm90RGVsZXRlRW1wbG95ZWVFeGNlcHRpb24uY2xhc3MsICgpIC0+IGVtcGxveWVlU2VydmljZS5kZWxldGVFbXBsb3llZShmZW1hbGVFbXBsb3llZS5nZXRJZCgpKSk7CiAgICB9CiAgICBAVGVzdAogICAgcHVibGljIHZvaWQgZ2V0RW1wbG95ZWVzQm9ybkJlZm9yZTIwMDBfUmV0dXJuc0VtcGxveWVlcygpIHsKICAgICAgICBMaXN0PEVtcGxveWVlPiBlbXBsb3llZXMgPSBlbXBsb3llZVNlcnZpY2UuZ2V0RW1wbG95ZWVzQm9ybkJlZm9yZTIwMDAoKTsKICAgICAgICBhc3NlcnRGYWxzZShlbXBsb3llZXMuaXNFbXB0eSgpKTsKICAgICAgICBhc3NlcnRUcnVlKGVtcGxveWVlcy5zdHJlYW0oKS5hbGxNYXRjaChlIC0+IGUuZ2V0QmlydGhEYXRlKCkuZ2V0WWVhcigpIDwgMjAwMCkpOwogICAgfQp9Cg==. A continuación, los problemas reportados por SonarCloud: INFO: Remove this 'public' modifier. (line 14) MAJOR: Refactor the code of the lambda to have only one invocation possibly throwing a runtime exception. (line 17) INFO: Remove this 'public' modifier. (line 20) INFO: Remove this 'public' modifier. (line 10) .\n\n  Corrige exclusivamente esos problemas. ⚠️ IMPORTANTE: responde ÚNICAMENTE con el contenido completo de la clase Java ya corregida, como texto plano, sin ningún tipo de formato Markdown, sin backticks (```), sin encabezados, sin frases introductorias, sin comentarios adicionales ni explicaciones.\n\n  Devuelve solo el archivo .java ya corregido, como si estuvieras sobrescribiendo el original. No incluyas nada más."
+    }
+  ],
+  "temperature": 0.3
+}

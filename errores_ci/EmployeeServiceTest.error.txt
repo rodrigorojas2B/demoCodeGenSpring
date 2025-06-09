@@ -1,0 +1,29 @@
+package test.core.api.service;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import test.core.api.exception.CannotDeleteEmployeeException;
+import test.core.api.model.Employee;
+import java.util.List;
+import static org.junit.jupiter.api.Assertions.*;
+
+@SpringBootTest
+class EmployeeServiceTest {
+    @Autowired
+    private EmployeeService employeeService;
+
+    @Test
+    void deleteEmployee_FemaleEmployee_ThrowsException() {
+        Employee femaleEmployee = new Employee();
+        femaleEmployee.setGender("Femenino");
+        String id = femaleEmployee.getId();
+        assertThrows(CannotDeleteEmployeeException.class, () -> employeeService.deleteEmployee(id));
+    }
+
+    @Test
+    void getEmployeesBornBefore2000_ReturnsEmployees() {
+        List<Employee> employees = employeeService.getEmployeesBornBefore2000();
+        assertFalse(employees.isEmpty());
+        assertTrue(employees.stream().allMatch(e -> e.getBirthDate().getYear() < 2000));
+    }
+}

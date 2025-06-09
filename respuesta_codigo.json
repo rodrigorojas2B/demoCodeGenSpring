@@ -1,0 +1,36 @@
+{
+  "id": "chatcmpl-BgfDEIEYEMohazF9OQ0RBVXVbMJI3",
+  "object": "chat.completion",
+  "created": 1749507896,
+  "model": "gpt-4-0613",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "--- ARCHIVO: src/main/java/test/core/api/controller/EmployeeController.java ---\npackage test.core.api.controller;\n\nimport java.util.List;\nimport test.core.api.model.Employee;\n\npublic class EmployeeController {\n\n    public List<Employee> getAllEmployees() {\n        // Implementación pendiente\n        return null;\n    }\n}",
+        "refusal": null,
+        "annotations": []
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 969,
+    "completion_tokens": 62,
+    "total_tokens": 1031,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "audio_tokens": 0,
+      "accepted_prediction_tokens": 0,
+      "rejected_prediction_tokens": 0
+    }
+  },
+  "service_tier": "default",
+  "system_fingerprint": null
+}

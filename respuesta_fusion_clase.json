@@ -1,0 +1,36 @@
+{
+  "id": "chatcmpl-BgfCmKcKdHZ2AjrbUCmY4rkNNu5Ci",
+  "object": "chat.completion",
+  "created": 1749507868,
+  "model": "gpt-4-0613",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "package test.core.api.repository;\n\nimport org.springframework.data.jpa.repository.JpaRepository;\nimport org.springframework.data.jpa.repository.Query;\nimport org.springframework.data.repository.query.Param;\nimport test.core.api.model.Employee;\nimport java.util.Date;\nimport java.util.List;\n\npublic interface EmployeeRepository extends JpaRepository<Employee, Long> {\n    \n    @Query(\"SELECT e FROM Employee e WHERE e.birthDate < :date\")\n    List<Employee> findEmployeesBornBefore(@Param(\"date\") Date date);\n    \n}",
+        "refusal": null,
+        "annotations": []
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 302,
+    "completion_tokens": 94,
+    "total_tokens": 396,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "audio_tokens": 0,
+      "accepted_prediction_tokens": 0,
+      "rejected_prediction_tokens": 0
+    }
+  },
+  "service_tier": "default",
+  "system_fingerprint": null
+}
