@@ -1,0 +1,36 @@
+{
+  "id": "chatcmpl-BgfV56DyIoZFBkdQQvpS8dYXv21Ff",
+  "object": "chat.completion",
+  "created": 1749509003,
+  "model": "gpt-4-0613",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "package test.core.api.controller;\nimport org.springframework.beans.factory.annotation.Autowired;\nimport org.springframework.http.ResponseEntity;\nimport org.springframework.web.bind.annotation.DeleteMapping;\nimport org.springframework.web.bind.annotation.GetMapping;\nimport org.springframework.web.bind.annotation.PathVariable;\nimport org.springframework.web.bind.annotation.RestController;\nimport test.core.api.model.Employee;\nimport test.core.api.service.EmployeeService;\nimport java.util.List;\n\n@RestController\npublic class EmployeeController {\n    private final EmployeeService employeeService;\n\n    @Autowired\n    public EmployeeController(EmployeeService employeeService) {\n        this.employeeService = employeeService;\n    }\n\n    @DeleteMapping(\"/employees/{id}\")\n    public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {\n        employeeService.deleteEmployee(id);\n        return ResponseEntity.ok().build();\n    }\n\n    @GetMapping(\"/employees/born-before-2000\")\n    public ResponseEntity<List<Employee>> getEmployeesBornBefore2000() {\n        List<Employee> employees = employeeService.getEmployeesBornBefore2000();\n        return ResponseEntity.ok(employees);\n    }\n}",
+        "refusal": null,
+        "annotations": []
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 1221,
+    "completion_tokens": 201,
+    "total_tokens": 1422,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "audio_tokens": 0,
+      "accepted_prediction_tokens": 0,
+      "rejected_prediction_tokens": 0
+    }
+  },
+  "service_tier": "default",
+  "system_fingerprint": null
+}

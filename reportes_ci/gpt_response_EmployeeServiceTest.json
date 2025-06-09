@@ -1,0 +1,36 @@
+{
+  "id": "chatcmpl-BgfVUTT36n29x8KIdLvWn3ye6mXba",
+  "object": "chat.completion",
+  "created": 1749509028,
+  "model": "gpt-4-0613",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "```java\npackage test.core.api.service;\nimport org.junit.jupiter.api.Test;\nimport org.springframework.beans.factory.annotation.Autowired;\nimport org.springframework.boot.test.context.SpringBootTest;\nimport test.core.api.exception.CannotDeleteEmployeeException;\nimport test.core.api.model.Employee;\nimport test.core.api.repository.EmployeeRepository;\nimport java.time.LocalDate;\nimport java.util.List;\nimport static org.junit.jupiter.api.Assertions.*;\n\n@SpringBootTest\nclass EmployeeServiceTest {\n    @Autowired\n    private EmployeeService employeeService;\n    @Autowired\n    private EmployeeRepository employeeRepository;\n\n    @Test\n    void testDeleteEmployee() {\n        Employee employee = new Employee();\n        employee.setGender(\"Femenino\");\n        employee = employeeRepository.save(employee);\n        try {\n            employeeService.deleteEmployee(employee.getId());\n            fail(\"Expected CannotDeleteEmployeeException\");\n        } catch (CannotDeleteEmployeeException e) {\n            // Exception was thrown, so test passes.\n        }\n    }\n\n    @Test\n    void testGetEmployeesBornBefore2000() {\n        Employee employee = new Employee();\n        employee.setBirthDate(LocalDate.of(1999, 12, 31));\n        employee = employeeRepository.save(employee);\n        List<Employee> employees = employeeService.getEmployeesBornBefore2000();\n        assertTrue(employees.contains(employee));\n    }\n}\n```",
+        "refusal": null,
+        "annotations": []
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 1455,
+    "completion_tokens": 258,
+    "total_tokens": 1713,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "audio_tokens": 0,
+      "accepted_prediction_tokens": 0,
+      "rejected_prediction_tokens": 0
+    }
+  },
+  "service_tier": "default",
+  "system_fingerprint": null
+}

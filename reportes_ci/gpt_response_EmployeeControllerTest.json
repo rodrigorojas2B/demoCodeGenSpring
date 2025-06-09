@@ -1,0 +1,36 @@
+{
+  "id": "chatcmpl-BgfVJJ55QGafFTP9o8N50NQ6SBRr8",
+  "object": "chat.completion",
+  "created": 1749509017,
+  "model": "gpt-4-0613",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "package test.core.api.controller;\nimport org.junit.jupiter.api.Test;\nimport org.springframework.beans.factory.annotation.Autowired;\nimport org.springframework.boot.test.context.SpringBootTest;\nimport org.springframework.boot.test.web.client.TestRestTemplate;\nimport org.springframework.http.HttpStatus;\nimport org.springframework.http.ResponseEntity;\nimport test.core.api.model.Employee;\nimport test.core.api.repository.EmployeeRepository;\nimport java.time.LocalDate;\nimport static org.junit.jupiter.api.Assertions.*;\n\n@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)\nclass EmployeeControllerTest {\n    @Autowired\n    private TestRestTemplate restTemplate;\n    @Autowired\n    private EmployeeRepository employeeRepository;\n    @Test\n    void testDeleteEmployee() {\n        Employee employee = new Employee();\n        employee.setGender(\"Female\");\n        employee = employeeRepository.save(employee);\n        ResponseEntity<Void> response = restTemplate.postForEntity(\"/employees/\" + employee.getId(), null, Void.class);\n        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());\n    }\n    @Test\n    void testGetEmployeesBornBefore2000() {\n        Employee employee = new Employee();\n        employee.setBirthDate(LocalDate.of(1999, 12, 31));\n        employeeRepository.save(employee);\n        ResponseEntity<Employee[]> response = restTemplate.getForEntity(\"/employees/born-before-2000\", Employee[].class);\n        assertEquals(HttpStatus.OK, response.getStatusCode());\n        assertTrue(response.getBody().length > 0);\n    }\n}",
+        "refusal": null,
+        "annotations": []
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 1753,
+    "completion_tokens": 275,
+    "total_tokens": 2028,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "audio_tokens": 0,
+      "accepted_prediction_tokens": 0,
+      "rejected_prediction_tokens": 0
+    }
+  },
+  "service_tier": "default",
+  "system_fingerprint": null
+}

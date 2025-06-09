@@ -1,0 +1,36 @@
+{
+  "id": "chatcmpl-BgfVC49MQRB3gywVc9wqIk71FqksJ",
+  "object": "chat.completion",
+  "created": 1749509010,
+  "model": "gpt-4-0613",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "package test.core.api.service;\nimport org.springframework.stereotype.Service;\nimport test.core.api.exception.CannotDeleteEmployeeException;\nimport test.core.api.model.Employee;\nimport test.core.api.repository.EmployeeRepository;\nimport java.time.LocalDate;\nimport java.util.List;\n\n@Service\npublic class EmployeeService {\n    private final EmployeeRepository employeeRepository;\n\n    public EmployeeService(EmployeeRepository employeeRepository) {\n        this.employeeRepository = employeeRepository;\n    }\n\n    public void deleteEmployee(Long id) {\n        Employee employee = employeeRepository.findById(id).orElse(null);\n        if (employee != null && \"Femenino\".equalsIgnoreCase(employee.getGender())) {\n            throw new CannotDeleteEmployeeException(\"Cannot delete female employee\");\n        }\n        employeeRepository.deleteById(id);\n    }\n\n    public List<Employee> getEmployeesBornBefore2000() {\n        return employeeRepository.findByBirthDateBefore(LocalDate.of(2000, 1, 1));\n    }\n}",
+        "refusal": null,
+        "annotations": []
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 1112,
+    "completion_tokens": 181,
+    "total_tokens": 1293,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "audio_tokens": 0,
+      "accepted_prediction_tokens": 0,
+      "rejected_prediction_tokens": 0
+    }
+  },
+  "service_tier": "default",
+  "system_fingerprint": null
+}

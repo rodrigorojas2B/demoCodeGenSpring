@@ -1,0 +1,36 @@
+{
+  "id": "chatcmpl-BgfT3UPoIPK7g69v9wSyPVNXuOKAE",
+  "object": "chat.completion",
+  "created": 1749508877,
+  "model": "gpt-4-0613",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "--- ANÁLISIS DE CLASES EXISTENTES ---\nGenera una tabla Markdown como esta:\n\n| Clase Java | Package | Clasificación | Motivo |\n|------------|---------|----------------|--------|\n| Employee | test.core.api.model | REUTILIZABLE-AS-IS | Contiene atributo `gender` y `birthDate` necesarios para las historias de usuario |\n| EmployeeRepository | test.core.api.repository | REUTILIZABLE-AS-IS | Se necesita para realizar operaciones CRUD en la base de datos |\n| EmployeeCoreApiApplication | test.core.api | REUTILIZABLE-AS-IS | Clase principal de la aplicación |\n| EmployeeService | NUEVA | NUEVA | Se necesita para implementar la lógica de negocio |\n| EmployeeController | NUEVA | NUEVA | Se necesita para exponer los endpoints de la API |\n| CannotDeleteEmployeeException | NUEVA | NUEVA | Se necesita para lanzar una excepción cuando se intenta eliminar un empleado femenino |\n| EmployeeServiceTest | NUEVA | NUEVA | Se necesita para realizar pruebas unitarias de la lógica de negocio |\n| EmployeeControllerTest | NUEVA | NUEVA | Se necesita para realizar pruebas de los endpoints de la API |\n\n--- INSTRUCCIONES DE MODIFICACIÓN ---\n- No eliminar ni reemplazar lógica existente.\n- Si se modifica un método, incluirlo completo con el nuevo código y lo que ya tenía.\n- Solo generar clases nuevas si están indicadas como NUEVA.\n- Cada clase debe estar en su package correcto, según lo indicado en la tabla.\n- NO repetir clases ya existentes si no cambian.\n- NO eliminar los métodos existentes a menos que sea necesario\n- NO reemplazar métodos u otro contenido de las clases existentes por comentarios entre líneas\n- Solo considerar como existente una clase si está listada explícitamente en \"CLASES DISPONIBLES EN EL PROYECTO\".\n- No debes asumir la existencia de clases que no aparecen explícitamente en la sección anterior. Si alguna clase no está listada entre las clases disponibles ni aparece en el código entregado, debe considerarse INEXISTENTE y marcada como NUEVA en el análisis.\n- Si una clase no aparece listada, asumir que es NUEVA.\n- Si una clase herada de otra clase o importa una interfaz propia del proyecto asegúrate que esta esté entre las clases existentes o genera el código respectivo de no existir previamente",
+        "refusal": null,
+        "annotations": []
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 1545,
+    "completion_tokens": 560,
+    "total_tokens": 2105,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "audio_tokens": 0,
+      "accepted_prediction_tokens": 0,
+      "rejected_prediction_tokens": 0
+    }
+  },
+  "service_tier": "default",
+  "system_fingerprint": null
+}

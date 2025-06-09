@@ -1,0 +1,14 @@
+{
+  "model": "gpt-4",
+  "messages": [
+    {
+      "role": "system",
+      "content": "Eres un asistente experto en Java y Spring Boot. Vas a recibir una clase en Java codificada en base64 y una lista de problemas de calidad detectados por SonarCloud. Tu tarea es corregir solo esos problemas, manteniendo la lógica y estructura original."
+    },
+    {
+      "role": "user",
+      "content": "Este es el código fuente en base64: cGFja2FnZSB0ZXN0LmNvcmUuYXBpLnNlcnZpY2U7CmltcG9ydCBvcmcuanVuaXQuanVwaXRlci5hcGkuVGVzdDsKaW1wb3J0IG9yZy5zcHJpbmdmcmFtZXdvcmsuYmVhbnMuZmFjdG9yeS5hbm5vdGF0aW9uLkF1dG93aXJlZDsKaW1wb3J0IG9yZy5zcHJpbmdmcmFtZXdvcmsuYm9vdC50ZXN0LmNvbnRleHQuU3ByaW5nQm9vdFRlc3Q7CmltcG9ydCB0ZXN0LmNvcmUuYXBpLmV4Y2VwdGlvbi5DYW5ub3REZWxldGVFbXBsb3llZUV4Y2VwdGlvbjsKaW1wb3J0IHRlc3QuY29yZS5hcGkubW9kZWwuRW1wbG95ZWU7CmltcG9ydCB0ZXN0LmNvcmUuYXBpLnJlcG9zaXRvcnkuRW1wbG95ZWVSZXBvc2l0b3J5OwppbXBvcnQgamF2YS50aW1lLkxvY2FsRGF0ZTsKaW1wb3J0IGphdmEudXRpbC5MaXN0OwppbXBvcnQgc3RhdGljIG9yZy5qdW5pdC5qdXBpdGVyLmFwaS5Bc3NlcnRpb25zLio7CkBTcHJpbmdCb290VGVzdApwdWJsaWMgY2xhc3MgRW1wbG95ZWVTZXJ2aWNlVGVzdCB7CiAgICBAQXV0b3dpcmVkCiAgICBwcml2YXRlIEVtcGxveWVlU2VydmljZSBlbXBsb3llZVNlcnZpY2U7CiAgICBAQXV0b3dpcmVkCiAgICBwcml2YXRlIEVtcGxveWVlUmVwb3NpdG9yeSBlbXBsb3llZVJlcG9zaXRvcnk7CiAgICBAVGVzdAogICAgcHVibGljIHZvaWQgdGVzdERlbGV0ZUVtcGxveWVlKCkgewogICAgICAgIEVtcGxveWVlIGVtcGxveWVlID0gbmV3IEVtcGxveWVlKCk7CiAgICAgICAgZW1wbG95ZWUuc2V0R2VuZGVyKCJGZW1lbmlubyIpOwogICAgICAgIGVtcGxveWVlID0gZW1wbG95ZWVSZXBvc2l0b3J5LnNhdmUoZW1wbG95ZWUpOwogICAgICAgIGFzc2VydFRocm93cyhDYW5ub3REZWxldGVFbXBsb3llZUV4Y2VwdGlvbi5jbGFzcywgKCkgLT4gZW1wbG95ZWVTZXJ2aWNlLmRlbGV0ZUVtcGxveWVlKGVtcGxveWVlLmdldElkKCkpKTsKICAgIH0KICAgIEBUZXN0CiAgICBwdWJsaWMgdm9pZCB0ZXN0R2V0RW1wbG95ZWVzQm9ybkJlZm9yZTIwMDAoKSB7CiAgICAgICAgRW1wbG95ZWUgZW1wbG95ZWUgPSBuZXcgRW1wbG95ZWUoKTsKICAgICAgICBlbXBsb3llZS5zZXRCaXJ0aERhdGUoTG9jYWxEYXRlLm9mKDE5OTksIDEyLCAzMSkpOwogICAgICAgIGVtcGxveWVlID0gZW1wbG95ZWVSZXBvc2l0b3J5LnNhdmUoZW1wbG95ZWUpOwogICAgICAgIExpc3Q8RW1wbG95ZWU+IGVtcGxveWVlcyA9IGVtcGxveWVlU2VydmljZS5nZXRFbXBsb3llZXNCb3JuQmVmb3JlMjAwMCgpOwogICAgICAgIGFzc2VydFRydWUoZW1wbG95ZWVzLmNvbnRhaW5zKGVtcGxveWVlKSk7CiAgICB9Cn0K. A continuación, los problemas reportados por SonarCloud: INFO: Remove this 'public' modifier. (line 18) MAJOR: Refactor the code of the lambda to have only one invocation possibly throwing a runtime exception. (line 22) INFO: Remove this 'public' modifier. (line 25) INFO: Remove this 'public' modifier. (line 12) .\n\n  Corrige exclusivamente esos problemas. ⚠️ IMPORTANTE: responde ÚNICAMENTE con el contenido completo de la clase Java ya corregida, como texto plano, sin ningún tipo de formato Markdown, sin backticks (```), sin encabezados, sin frases introductorias, sin comentarios adicionales ni explicaciones.\n\n  Devuelve solo el archivo .java ya corregido, como si estuvieras sobrescribiendo el original. No incluyas nada más."
+    }
+  ],
+  "temperature": 0.3
+}
