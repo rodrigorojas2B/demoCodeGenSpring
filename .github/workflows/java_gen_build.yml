@@ -325,7 +325,6 @@ jobs:
             echo "✅ Clase fusionada: $original_path"
           done
   
-
       - name: Reemplazar clases generadas en ubicación original
         run: |
           cd repositorio-base
@@ -335,6 +334,31 @@ jobs:
           for file in src/main/java/ai/generated/*.java src/test/java/ai/generated/*.java; do
             [ -e "$file" ] || continue
 
+            echo "🔍 Analizando: $file"
+
+            # Validar que contiene package
+            if ! grep -qE '^\s*package\s+[a-zA-Z0-9_.]+;' "$file"; then
+              echo "⚠️ $file no tiene package válido. Eliminando."
+              rm "$file"
+              continue
+            fi
+
+            # Validar que contiene clase/interface/enum
+            if ! grep -qE '\b(class|interface|enum)\b' "$file"; then
+              echo "⚠️ $file no contiene clase/interfaz/enum. Eliminando."
+              rm "$file"
+              continue
+            fi
+
+            # Validar cierre correcto
+            last_line=$(tail -n 1 "$file" | tr -d '[:space:]')
+            if [ "$last_line" != "}" ]; then
+              echo "⚠️ $file no termina correctamente. Eliminando."
+              rm "$file"
+              continue
+            fi
+
+            # Extraer datos
             package_line=$(grep '^package ' "$file" | head -n 1)
             package_path=$(echo "$package_line" | sed -E 's/package ([a-zA-Z0-9_.]+);/\1/' | tr '.' '/')
             class_name=$(basename "$file")
@@ -349,6 +373,12 @@ jobs:
             mv "$file" "$dest/$class_name"
             echo "✅ Movido: $file -> $dest/$class_name"
           done
+
+          echo "🧽 Eliminando residuos de generación..."
+          rm -rf src/main/java/ai/generated/*
+          rm -rf src/test/java/ai/generated/*
+          rm -f clase_*.java clases_generadas.java
+
 
       - name: Corrección de errores de compilación (máx 3 intentos)
         env:
