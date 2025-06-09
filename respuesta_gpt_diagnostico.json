@@ -1,0 +1,36 @@
+{
+  "id": "chatcmpl-BgcEe4wJQieh0UMj2mMSkGUJLeKH2",
+  "object": "chat.completion",
+  "created": 1749496452,
+  "model": "gpt-4-0613",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "--- ANÁLISIS DE CLASES EXISTENTES ---\n\n| Clase Java | Package | Clasificación | Motivo |\n|------------|---------|----------------|--------|\n| Employee | test.core.api.model | REUTILIZABLE-AS-IS | Contiene atributos `gender` y `birthDate` necesarios para las historias de usuario |\n| EmployeeRepository | test.core.api.repository | REUTILIZABLE-AS-IS | Se utiliza para operaciones de base de datos |\n| EmployeeCoreApiApplication | test.core.api | REUTILIZABLE-AS-IS | Clase principal de la aplicación |\n| EmployeeService | N/A | NUEVA | Se necesita para implementar la lógica de negocio |\n| EmployeeController | N/A | NUEVA | Se necesita para exponer los endpoints |\n| EmployeeServiceException | N/A | NUEVA | Se necesita para manejar excepciones específicas de la lógica de negocio |\n| EmployeeServiceTest | N/A | NUEVA | Se necesita para probar la lógica de negocio |\n| EmployeeControllerTest | N/A | NUEVA | Se necesita para probar los endpoints |\n\n--- INSTRUCCIONES DE MODIFICACIÓN ---\n- En la clase `EmployeeRepository`, se debe agregar un nuevo método para obtener los empleados nacidos antes del año 2000.\n- Se debe crear una nueva clase `EmployeeService` que contenga la lógica de negocio. Esta clase debe tener un método para eliminar empleados que lance una excepción si se intenta eliminar a una empleada mujer. También debe tener un método para obtener los empleados nacidos antes del año 2000.\n- Se debe crear una nueva clase `EmployeeController` que exponga los endpoints necesarios para las historias de usuario.\n- Se debe crear una nueva clase `EmployeeServiceException` que se utilice para manejar las excepciones específicas de la lógica de negocio.\n- Se deben crear clases de prueba `EmployeeServiceTest` y `EmployeeControllerTest` para probar la lógica de negocio y los endpoints, respectivamente.",
+        "refusal": null,
+        "annotations": []
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 1544,
+    "completion_tokens": 442,
+    "total_tokens": 1986,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "audio_tokens": 0,
+      "accepted_prediction_tokens": 0,
+      "rejected_prediction_tokens": 0
+    }
+  },
+  "service_tier": "default",
+  "system_fingerprint": null
+}

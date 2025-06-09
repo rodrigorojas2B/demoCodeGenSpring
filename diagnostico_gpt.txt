@@ -1,0 +1,19 @@
+--- ANÁLISIS DE CLASES EXISTENTES ---
+
+| Clase Java | Package | Clasificación | Motivo |
+|------------|---------|----------------|--------|
+| Employee | test.core.api.model | REUTILIZABLE-AS-IS | Contiene atributos `gender` y `birthDate` necesarios para las historias de usuario |
+| EmployeeRepository | test.core.api.repository | REUTILIZABLE-AS-IS | Se utiliza para operaciones de base de datos |
+| EmployeeCoreApiApplication | test.core.api | REUTILIZABLE-AS-IS | Clase principal de la aplicación |
+| EmployeeService | N/A | NUEVA | Se necesita para implementar la lógica de negocio |
+| EmployeeController | N/A | NUEVA | Se necesita para exponer los endpoints |
+| EmployeeServiceException | N/A | NUEVA | Se necesita para manejar excepciones específicas de la lógica de negocio |
+| EmployeeServiceTest | N/A | NUEVA | Se necesita para probar la lógica de negocio |
+| EmployeeControllerTest | N/A | NUEVA | Se necesita para probar los endpoints |
+
+--- INSTRUCCIONES DE MODIFICACIÓN ---
+- En la clase `EmployeeRepository`, se debe agregar un nuevo método para obtener los empleados nacidos antes del año 2000.
+- Se debe crear una nueva clase `EmployeeService` que contenga la lógica de negocio. Esta clase debe tener un método para eliminar empleados que lance una excepción si se intenta eliminar a una empleada mujer. También debe tener un método para obtener los empleados nacidos antes del año 2000.
+- Se debe crear una nueva clase `EmployeeController` que exponga los endpoints necesarios para las historias de usuario.
+- Se debe crear una nueva clase `EmployeeServiceException` que se utilice para manejar las excepciones específicas de la lógica de negocio.
+- Se deben crear clases de prueba `EmployeeServiceTest` y `EmployeeControllerTest` para probar la lógica de negocio y los endpoints, respectivamente.
