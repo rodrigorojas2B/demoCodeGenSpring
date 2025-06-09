@@ -230,34 +230,31 @@ jobs:
           cat clases_generadas.java
           echo "--------------------------------------------------------"
 
-
       - name: Limpiar y separar clases generadas
         run: |
           cd repositorio-base
       
-          # === LIMPIEZA DE BLOQUE GPT ===
           echo "🧹 Limpiando residuos de formato GPT..."
           sed -i '/^---/d' clases_generadas.java
           sed -i '/^```/d' clases_generadas.java
+          sed -i '/^# .*$/d' clases_generadas.java
           sed -i '/^\/\/ Clase de prueba:/d' clases_generadas.java
           sed -i '/^\/\/ Clase modificada:/d' clases_generadas.java
           sed -i '/^\/\/ Resto de los métodos existentes\.\.\./d' clases_generadas.java
-          sed -i '/^# .*$/d' clases_generadas.java
           sed -i '/^--- CLASE MODIFICADA ---/d' clases_generadas.java
-          sed -i '${/^$/d;}' clases_generadas.java
-          # 🔍 Eliminar encabezados tipo markdown que confunden la separación de clases
           sed -i '/^[0-9]\+\.\s\+Clase/d' clases_generadas.java
           sed -i '/^[0-9]\+\.\s\+Pruebas/d' clases_generadas.java
           sed -i '/^.*Clase.*nueva.*$/d' clases_generadas.java
           sed -i '/^.*Pruebas.*$/d' clases_generadas.java
-
-          echo "📝 Contenido completo de clases_generadas.java:"
-          cat clases_generadas.java
-
-          # === ELIMINAR LÍNEAS ANTES DEL PRIMER package ===
-          sed -i '1,/^package /{/^package /!d}' clases_generadas.java
+          sed -i '/^$/d' clases_generadas.java
       
-          # === SEPARACIÓN DE CLASES ===
+          echo "📝 Mostrando contenido final antes de separar:"
+          cat clases_generadas.java
+      
+          echo "🧽 Ajustando para que el primer package sea la primera línea útil..."
+          awk 'BEGIN{found=0} /^\s*package /{found=1} found' clases_generadas.java > clases_generadas_limpio.java
+          mv clases_generadas_limpio.java clases_generadas.java
+      
           echo "📂 Separando clases en archivos individuales..."
           mkdir -p src/main/java/ai/generated
           mkdir -p src/test/java/ai/generated
@@ -266,40 +263,33 @@ jobs:
           echo "📂 Procesando archivos clase_*.java..."
           echo "🗂️ Archivos generados antes de moverlos:"
           ls -l clase_*.java
-
-          i=1
+      
           for file in clase_*.java; do
             echo "🔍 Analizando archivo: $file"
-            echo "📄 Guardando clase $class_name en $path/$class_name.java"
             echo "🔍 Contenido de $file:"
             cat "$file"
-
-
-            # Validar que el archivo contiene declaración de paquete válida
+      
+            # Validar que contiene declaración de paquete válida
             if ! grep -qE '^\s*package\s+[a-zA-Z0-9_.]+;' "$file"; then
               echo "⚠️ Archivo $file no contiene declaración de paquete válida. Eliminando."
               rm "$file"
               continue
             fi
-
-            # Validar que contiene una clase, interfaz o enum
+      
+            # Validar que contiene clase, interfaz o enum
             if ! grep -qE '\b(class|interface|enum)\b' "$file"; then
               echo "⚠️ Archivo $file no contiene clase, interfaz ni enum. Eliminando."
               rm "$file"
               continue
             fi
-
-            # Obtener nombre de la clase, interfaz o enum
+      
             class_name=$(grep -oP 'public\s+(class|interface|enum)\s+\K\w+' "$file" | head -n 1)
-
-            # Validar que se haya encontrado un nombre de clase
             if [ -z "$class_name" ]; then
               echo "⚠️ No se pudo determinar el nombre de clase en $file. Eliminando."
               rm "$file"
               continue
             fi
-
-            # Determinar si es test
+      
             if grep -q '@Test' "$file"; then
               dest="src/test/java/ai/generated"
               echo "✅ Clasificado como TEST -> $dest/${class_name}.java"
@@ -307,10 +297,10 @@ jobs:
               dest="src/main/java/ai/generated"
               echo "✅ Clasificado como CLASE -> $dest/${class_name}.java"
             fi
-
+      
             mv "$file" "$dest/${class_name}.java"
-            i=$((i+1))
           done
+      
 
       - name: Fusionar clases generadas con las originales (si existen)
         env:
