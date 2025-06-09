@@ -541,7 +541,205 @@ jobs:
           jq -r '.issues[].component' reporte_original.json | sort -u > archivos_afectados.txt
           echo "📄 Archivos con problemas:"
           cat archivos_afectados.txt
-      
+
+      - name: Llamar a OpenAI por cada archivo afectado
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          iter=1
+          echo "ITERACION_ACTUAL=$iter" >> $GITHUB_ENV
+          mkdir -p reportes_ci errores_ci
+
+          while read COMPONENT; do
+            echo "📄 Analizando componente: $COMPONENT"
+            FILE=$(echo "$COMPONENT" | sed 's/^rodrigorojasg_testSpring://')
+
+            if [ ! -f "$FILE" ]; then
+              echo "⚠️ Archivo no encontrado: $FILE"
+              continue
+            fi
+
+            BASENAME=$(basename "$FILE" .java)
+            if [ -z "$BASENAME" ]; then
+              echo "❌ Nombre de archivo inválido (basename vacío). FILE: $FILE"
+              continue
+            fi
+
+            CODE_B64=$(base64 "$FILE" | tr -d '\n')
+
+            REPORT=$(curl -s "https://sonarcloud.io/api/issues/search?componentKeys=$COMPONENT&resolved=false" \
+              -H "Authorization: Bearer $SONAR_TOKEN" |
+              jq -r '.issues[] | "\(.severity): \(.message) (line \(.line))"' | tr '\n' ' ')
+
+            if [ -z "$REPORT" ]; then
+              echo "⚠️ No se encontraron problemas específicos en $FILE, se omite"
+              continue
+            fi
+
+            RESPONSE_FILE="reportes_ci/gpt_response_${BASENAME}.json"
+
+            PROMPT_SISTEMA="Eres un asistente experto en Java y Spring Boot. Vas a recibir una clase en Java codificada en base64 y una lista de problemas de calidad detectados por SonarCloud. Tu tarea es corregir solo esos problemas, manteniendo la lógica y estructura original."
+
+            MENSAJE_USUARIO="Este es el código fuente en base64: $CODE_B64. A continuación, los problemas reportados por SonarCloud: $REPORT.
+
+            Corrige exclusivamente esos problemas. ⚠️ IMPORTANTE: responde ÚNICAMENTE con el contenido completo de la clase Java ya corregida, como texto plano, sin ningún tipo de formato Markdown, sin backticks (\`\`\`), sin encabezados, sin frases introductorias, sin comentarios adicionales ni explicaciones.
+
+            Devuelve solo el archivo .java ya corregido, como si estuvieras sobrescribiendo el original. No incluyas nada más."
+
+            jq -n \
+              --arg prompt "$PROMPT_SISTEMA" \
+              --arg user "$MENSAJE_USUARIO" \
+              '{
+                model: "gpt-4",
+                messages: [
+                  { role: "system", content: $prompt },
+                  { role: "user", content: $user }
+                ],
+                temperature: 0.3
+              }' > payload.json
+
+            curl -s https://api.openai.com/v1/chat/completions \
+              -H "Authorization: Bearer $OPENAI_API_KEY" \
+              -H "Content-Type: application/json" \
+              -d @payload.json > "$RESPONSE_FILE"
+
+            RESPUESTA=$(jq -r '.choices[0].message.content // empty' "$RESPONSE_FILE")
+
+            DESTINO_MEJORADO="src/${FILE#src/}"
+            DESTINO_MEJORADO="${DESTINO_MEJORADO%.java}.mejorado.java"
+            mkdir -p "$(dirname "$DESTINO_MEJORADO")"
+
+            echo "🔍 Contenido recibido de GPT para $FILE:"
+            echo "$RESPUESTA"
+            echo "----------------------------------------"
+
+            if echo "$RESPUESTA" | grep -q "public class"; then
+              echo "$RESPUESTA" > "$DESTINO_MEJORADO"
+              echo "✅ Generado: $DESTINO_MEJORADO"
+            else
+              echo "$RESPUESTA" > "errores_ci/${BASENAME}.error.txt"
+              echo "❌ Contenido inesperado para $FILE, guardado en errores_ci"
+            fi
+          done < archivos_afectados.txt
+
+
+
+
+      - name: Preparar carpeta src-analizado
+        run: |
+          mkdir -p src-analizado/main/java
+          for f in $(find . -name "*.mejorado.java"); do
+            destino="src-analizado/$(echo $f | cut -d/ -f2- | sed 's/\.mejorado//')"
+            mkdir -p $(dirname "$destino")
+            cp "$f" "$destino"
+          done
+
+      - name: Análisis con SonarCloud del código mejorado
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          mvn sonar:sonar \
+            -Dsonar.projectKey=rodrigorojasg_testSpring_gpt \
+            -Dsonar.organization=rodrigorojasg \
+            -Dsonar.projectName="testSpring GPT Mejorado" \
+            -Dsonar.sources=src-analizado/main/java \
+            -Dsonar.tests=src/test \
+            -Dsonar.java.binaries=target/classes \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.login=$SONAR_TOKEN
+
+      - name: Guardar reporte mejorado
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          curl -s "https://sonarcloud.io/api/issues/search?componentKeys=rodrigorojasg_testSpring_gpt&resolved=false" \
+            -H "Authorization: Bearer $SONAR_TOKEN" > reporte_mejorado.json
+
+      - name: Comparar resultados de análisis
+        id: comparar_errores
+        run: |
+          echo "📊 Comparación de severidades:"
+
+          echo "ANTES:"
+          jq '[.issues[]?.severity] | group_by(.) | map({ (.[0]): length }) | add' reporte_original.json > severidades_antes.json
+          cat severidades_antes.json
+
+          echo "DESPUÉS:"
+          jq '[.issues[]?.severity] | group_by(.) | map({ (.[0]): length }) | add' reporte_mejorado.json > severidades_despues.json
+          cat severidades_despues.json
+
+          puntaje_antes=$(jq '[.issues[]?.severity] |
+            map(
+              if . == "BLOCKER" then 10
+              elif . == "CRITICAL" then 7
+              elif . == "MAJOR" then 5
+              elif . == "MINOR" then 3
+              elif . == "INFO" then 1
+              else 0 end
+            ) | add // 0' reporte_original.json)
+
+          puntaje_despues=$(jq '[.issues[]?.severity] |
+            map(
+              if . == "BLOCKER" then 10
+              elif . == "CRITICAL" then 7
+              elif . == "MAJOR" then 5
+              elif . == "MINOR" then 3
+              elif . == "INFO" then 1
+              else 0 end
+            ) | add // 0' reporte_mejorado.json)
+
+          echo "PUNTAJE_ANTES=$puntaje_antes" >> $GITHUB_ENV
+          echo "PUNTAJE_DESPUES=$puntaje_despues" >> $GITHUB_ENV
+
+          if [ "$puntaje_despues" -lt "$puntaje_antes" ]; then
+            echo "MEJORA_SIGNIFICATIVA=true" >> $GITHUB_ENV
+            echo "✅ Mejora significativa detectada (↓ $puntaje_antes → $puntaje_despues)"
+          elif [ "$puntaje_despues" -eq "$puntaje_antes" ]; then
+            echo "MEJORA_SIGNIFICATIVA=false" >> $GITHUB_ENV
+            echo "⚠️ Sin cambios en severidades ($puntaje_antes → $puntaje_despues)"
+          else
+            echo "MEJORA_SIGNIFICATIVA=false" >> $GITHUB_ENV
+            echo "⛔ Las severidades aumentaron ($puntaje_antes → $puntaje_despues)"
+          fi
+
+
+      - name: Commit automático si hay mejora significativa
+        if: env.MEJORA_SIGNIFICATIVA == 'true'
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git remote set-url origin https://x-access-token:${GH_PAT}@github.com/${{ github.repository }}.git
+
+          git fetch origin
+          git pull --rebase origin main
+
+          iter_dir="ci-reportes/iteracion-${ITERACION_ACTUAL}"
+          mkdir -p "$iter_dir"
+          cp reporte_original.json "$iter_dir/"
+          cp reporte_mejorado.json "$iter_dir/"
+          cp reportes_ci/* "$iter_dir/" || true
+
+          git add ci-reportes/
+
+          MEJORADOS=$(find src -type f -name "*.mejorado.java")
+
+          if [ -n "$MEJORADOS" ]; then
+            echo "$MEJORADOS" | xargs git add
+          else
+            echo "⚠️ No se encontraron archivos .mejorado.java para agregar"
+          fi
+
+
+          if git diff --cached --quiet; then
+            echo "⛔ No hay cambios para commitear, se omite push"
+          else
+            git commit -m "🤖 Iteración ${ITERACION_ACTUAL}: mejora aplicada con reducción de severidades"
+            git push origin main
+          fi
+        
     
       - name: Commit y push de la nueva funcionalidad (si todo compila)
         if: success()
