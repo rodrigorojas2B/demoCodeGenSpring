@@ -181,6 +181,7 @@ jobs:
           - Si se crea una llamada a un método de otra clase asegúrate que ese método exista en la clase o créalo de ser necesario
           - Asegurate que el el código generado sea compilable, corríjelo hasta que lo sea
           - Nunca uses el método stream() u otros métodos que pueden ser ambiguos entre versiones de Java.
+          - Siempre importa las clases que uses dentro de otra clase, valida siempre que clase clase utilizada tenga su import correspondiente.
           EOF
 
 
