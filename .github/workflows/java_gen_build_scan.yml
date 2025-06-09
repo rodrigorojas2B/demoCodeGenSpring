@@ -585,6 +585,7 @@ jobs:
           cat archivos_afectados.txt
 
       - name: Llamar a OpenAI por cada archivo afectado
+        working-directory: repositorio-base
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -682,6 +683,11 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
+          if [ ! -d src-analizado/main/java ]; then
+            echo "⛔ Carpeta src-analizado/main/java no existe. Saltando análisis Sonar."
+            exit 0
+          fi
+      
           mvn sonar:sonar \
             -Dsonar.projectKey=rodrigorojasg_testSpring_gpt \
             -Dsonar.organization=rodrigorojasg \
@@ -691,6 +697,7 @@ jobs:
             -Dsonar.java.binaries=target/classes \
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.login=$SONAR_TOKEN
+        
 
       - name: Guardar reporte mejorado
         env:

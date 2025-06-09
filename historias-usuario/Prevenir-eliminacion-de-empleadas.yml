@@ -8,7 +8,7 @@ descripcion:
 criterios_aceptacion:
   - Si se intenta eliminar un empleado con género "Femenino", se debe lanzar una excepción o retornar un error controlado.
   - Si el empleado es de género "Masculino" u otro valor, se permite la eliminación normal.
-  - El método de eliminación actual  debe ser modificado para incluir esta validación.
+  - El método de eliminación actual debe ser modificado para incluir esta validación.
   - No debe eliminarse ninguna lógica existente que ya esté implementada en ese método.
   - Se deben mantener todos los métodos actuales sin eliminación ni reemplazo.
   - La modificación debe estar delimitada por comentarios que indiquen claramente el inicio y fin del cambio realizado por la IA.
