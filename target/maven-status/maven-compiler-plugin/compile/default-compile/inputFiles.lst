@@ -1,0 +1,6 @@
+/home/runner/work/demoCodeGenSpring/demoCodeGenSpring/repositorio-base/src/main/java/test/core/api/repository/EmployeeRepository.java
+/home/runner/work/demoCodeGenSpring/demoCodeGenSpring/repositorio-base/src/main/java/test/core/api/controller/EmployeeController.java
+/home/runner/work/demoCodeGenSpring/demoCodeGenSpring/repositorio-base/src/main/java/test/core/api/model/Employee.java
+/home/runner/work/demoCodeGenSpring/demoCodeGenSpring/repositorio-base/src/main/java/test/core/api/exception/InvalidDeletionException.java
+/home/runner/work/demoCodeGenSpring/demoCodeGenSpring/repositorio-base/src/main/java/test/core/api/EmployeeCoreApiApplication.java
+/home/runner/work/demoCodeGenSpring/demoCodeGenSpring/repositorio-base/src/main/java/test/core/api/service/EmployeeService.java

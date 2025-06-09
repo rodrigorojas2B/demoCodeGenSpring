@@ -1,0 +1,36 @@
+{
+  "id": "chatcmpl-Bgcgf1EWouQx1LI0BxvdGTLkhOFvy",
+  "object": "chat.completion",
+  "created": 1749498189,
+  "model": "gpt-4-0613",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "--- ARCHIVO CORREGIDO: src/main/java/test/core/api/model/Employee.java ---\npackage test.core.api.model;\nimport java.time.LocalDate;\n\npublic class Employee {\n    private Long id;\n    private String name;\n    private String gender;\n    private LocalDate birthDate;\n\n    // Getters and Setters\n    public Long getId() {\n        return id;\n    }\n\n    public void setId(Long id) {\n        this.id = id;\n    }\n\n    public String getName() {\n        return name;\n    }\n\n    public void setName(String name) {\n        this.name = name;\n    }\n\n    public String getGender() {\n        return gender;\n    }\n\n    public void setGender(String gender) {\n        this.gender = gender;\n    }\n\n    public LocalDate getBirthDate() {\n        return birthDate;\n    }\n\n    public void setBirthDate(LocalDate birthDate) {\n        this.birthDate = birthDate;\n    }\n}",
+        "refusal": null,
+        "annotations": []
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 414,
+    "completion_tokens": 185,
+    "total_tokens": 599,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "audio_tokens": 0,
+      "accepted_prediction_tokens": 0,
+      "rejected_prediction_tokens": 0
+    }
+  },
+  "service_tier": "default",
+  "system_fingerprint": null
+}

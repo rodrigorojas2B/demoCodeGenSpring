@@ -1,0 +1,15 @@
+
+:test.core.api.model.Employee#getGender()Ljava/lang/String;€
+v/home/runner/work/demoCodeGenSpring/demoCodeGenSpring/repositorio-base/src/main/java/test/core/api/model/Employee.java ("1*©
+1 (t
+r
+ (
+%0java.lang.String"__id*H
+
+__unknown_file (,**
+test.core.api.model.Employee"
+gender"$
+ (
+
+%0java.lang.StringB 
+test.core.api.model.EmployeeH

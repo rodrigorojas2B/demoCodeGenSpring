@@ -1,0 +1,98 @@
+
+1.0rodrigorojasg_testSpringJavaFrontend"1749498218231*java2.BÍ
+C
+>src/main/java/test/core/api/repository/EmployeeRepository.java2
+
+package4
+
+test.core.api.repository5
+0
++test.core.api.repository.EmployeeRepository7
+
+	interface8
+
+access9
+
+public10
+
+simple name11
+
+EmployeeRepository12
+;
+5org.springframework.data.jpa.repository.JpaRepository14
+
+unknown15
+
+
+implements16
+/
+)org.springframework.stereotype.Repository18
+
+annotated by19
+
+
+uses20
+"
+test.core.api.model.Employee22
+n
+htest.core.api.repository.EmployeeRepository#findByBirthDateBefore(Ljava/time/LocalDate;)Ljava/util/List;24
+
+method25
+
+findByBirthDateBefore26J
+
+1
+12Z
+
+3	
+354jπ
+
+21
+212215
+9
+64
+678 *
+1 ($:3B
+	
+9
+10
+
+
+11
+12
+
+17
+171815
+
+13
+131415
+@
+23:
+232425 *
+1	 	(	26:3B
+	
+9
+10
+
+
+11
+26rù
+
+61316*
+1- (:
+
+61719*
+1 (
+
+61720*
+1 (
+
+61320*
+1- (:
+
+62120*
+1; (C
+
+232120*
+1	
+ 	(

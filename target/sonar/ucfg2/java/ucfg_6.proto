@@ -1,0 +1,15 @@
+
+@test.core.api.model.Employee#getBirthDate()Ljava/time/LocalDate;€
+v/home/runner/work/demoCodeGenSpring/demoCodeGenSpring/repositorio-base/src/main/java/test/core/api/model/Employee.java# #(!"1*²
+1$ $(z
+x
+$ $(
+%0java.time.LocalDate"__id*K
+
+__unknown_file (/*-
+test.core.api.model.Employee"
+	birthDate"'
+$ $(
+
+%0java.time.LocalDateB 
+test.core.api.model.EmployeeH

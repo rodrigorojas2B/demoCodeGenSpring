@@ -1,0 +1,40 @@
+
+utest.core.api.controller.EmployeeController#deleteEmployee(Ljava/lang/Long;)Lorg/springframework/http/ResponseEntity;ê
+Ö/home/runner/work/demoCodeGenSpring/demoCodeGenSpring/repositorio-base/src/main/java/test/core/api/controller/EmployeeController.java  (."1*ˆ
+1 (¢
+ü
+ (+
+%0%test.core.api.service.EmployeeService"__id*`
+
+__unknown_file (D*B-
++test.core.api.controller.EmployeeController"
+employeeServiceÉÄ
+ (*
+
+%1void"Gtest.core.api.service.EmployeeService#deleteEmployee(Ljava/lang/Long;)V*I
+
+__unknown_file (-
++
+%0%test.core.api.service.EmployeeService*2
+
+__unknown_file (
+
+idjava.lang.Long2 deleteEmployee(Ljava/lang/Long;)Ù
+Ò
+ ("9
+%23org.springframework.http.ResponseEntity$BodyBuilder"aorg.springframework.http.ResponseEntity#ok()Lorg/springframework/http/ResponseEntity$BodyBuilder;*G
+
+__unknown_file (+")
+'org.springframework.http.ResponseEntityáÑ
+ (*-
+%3'org.springframework.http.ResponseEntity"gorg.springframework.http.ResponseEntity$HeadersBuilder#build()Lorg/springframework/http/ResponseEntity;*W
+
+__unknown_file (;
+9
+%23org.springframework.http.ResponseEntity$BodyBuilder2build()";
+ (+/
+-
+%3'org.springframework.http.ResponseEntity: 
+/ (D
+idjava.lang.LongB/-
++test.core.api.controller.EmployeeControllerH

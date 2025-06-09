@@ -1,0 +1,37 @@
+
+Rtest.core.api.service.EmployeeService#getEmployeesBornBefore2000()Ljava/util/List;‰
+/home/runner/work/demoCodeGenSpring/demoCodeGenSpring/repositorio-base/src/main/java/test/core/api/service/EmployeeService.java (4"1*š
+1 (!¥
+¢
+ (!1
+%0+test.core.api.repository.EmployeeRepository"__id*]
+
+__unknown_file (A*?'
+%test.core.api.service.EmployeeService"
+employeeRepositoryö
+ó
+8 (P
+%1java.time.LocalDate"0java.time.LocalDate#of(III)Ljava/time/LocalDate;*3
+
+__unknown_file ("
+java.time.LocalDate*!
+
+__unknown_file (2Ð* 
+
+__unknown_file (2* 
+
+__unknown_file (2ÅÂ
+ (Q
+%2java.util.List"htest.core.api.repository.EmployeeRepository#findByBirthDateBefore(Ljava/time/LocalDate;)Ljava/util/List;*O
+
+__unknown_file (3
+1
+%0+test.core.api.repository.EmployeeRepository*7
+
+__unknown_file (
+
+%1java.time.LocalDate2,findByBirthDateBefore(Ljava/time/LocalDate;)""
+ (R
+
+%2java.util.ListB)'
+%test.core.api.service.EmployeeServiceH

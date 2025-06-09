@@ -1,0 +1,19 @@
+--- ANÁLISIS DE CLASES EXISTENTES ---
+
+| Clase Java | Package | Clasificación | Motivo |
+|------------|---------|----------------|--------|
+| Employee | test.core.api.model | REUTILIZABLE-AS-IS | Contiene atributos `gender` y `birthDate` necesarios para las validaciones |
+| EmployeeRepository | test.core.api.repository | REUTILIZABLE-AS-IS | Se utiliza para interactuar con la base de datos |
+| EmployeeCoreApiApplication | test.core.api | REUTILIZABLE-AS-IS | Clase principal de la aplicación |
+| EmployeeService | N/A | NUEVA | Se necesita para implementar la lógica de negocio |
+| EmployeeController | N/A | NUEVA | Se necesita para exponer los endpoints de la API |
+| InvalidDeletionException | N/A | NUEVA | Se necesita para manejar la excepción cuando se intenta eliminar un empleado femenino |
+| EmployeeServiceTest | N/A | NUEVA | Se necesita para realizar pruebas unitarias de la lógica de negocio |
+| EmployeeControllerTest | N/A | NUEVA | Se necesita para realizar pruebas unitarias de los endpoints de la API |
+
+--- INSTRUCCIONES DE MODIFICACIÓN ---
+- En la clase `EmployeeService`, se debe implementar un método `deleteEmployee` que valide el género del empleado antes de eliminarlo. Si el género es "Femenino", se debe lanzar una excepción `InvalidDeletionException`.
+- En la clase `EmployeeService`, se debe implementar un método `getEmployeesBornBefore2000` que retorne una lista de empleados nacidos antes del año 2000.
+- En la clase `EmployeeController`, se debe implementar un endpoint `DELETE /employees/{id}` que utilice el método `deleteEmployee` de `EmployeeService`.
+- En la clase `EmployeeController`, se debe implementar un endpoint `GET /employees/born-before-2000` que utilice el método `getEmployeesBornBefore2000` de `EmployeeService`.
+- Se deben crear las clases `EmployeeServiceTest` y `EmployeeControllerTest` para realizar pruebas unitarias de los métodos implementados en `EmployeeService` y `EmployeeController`, respectivamente.

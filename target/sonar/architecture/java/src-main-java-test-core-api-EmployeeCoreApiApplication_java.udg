@@ -1,0 +1,133 @@
+
+1.0rodrigorojasg_testSpringJavaFrontend"1749498218295*java2.Bþ
+@
+;src/main/java/test/core/api/EmployeeCoreApiApplication.java2
+
+package4
+
+test.core.api5
+-
+(test.core.api.EmployeeCoreApiApplication7
+
+
+class8
+
+access9
+
+public10
+
+simple name11
+ 
+EmployeeCoreApiApplication12
+B
+<org.springframework.boot.autoconfigure.SpringBootApplication14
+
+unknown15
+
+annotated by16
+
+
+uses17
+;
+5org.springframework.scheduling.annotation.EnableAsync19
+I
+Ctest.core.api.EmployeeCoreApiApplication#main([Ljava/lang/String;)V21
+
+method22
+
+
+main23
+<
+6org.springframework.beans.factory.annotation.Autowired25
+@
+:org.springframework.context.ConfigurableApplicationContext27
+
+returns28
+0
+*org.springframework.boot.SpringApplication30
+
+
+references31
+—
+org.springframework.boot.SpringApplication#run(Ljava/lang/Class;[Ljava/lang/String;)Lorg/springframework/context/ConfigurableApplicationContext;33
+
+calls34J
+
+1
+12Z
+
+3	
+354jõ
+
+32
+323315
+
+29
+293015
+
+13
+131415
+9
+64
+678 *
+1	 	((:3B
+	
+9
+10
+
+
+11
+12
+
+26
+262715
+
+18
+181915
+
+24
+242515
+@
+20:
+202122 *
+1 (26:3B
+	
+9
+10
+
+
+11
+23r¤
+
+61316*
+1 (
+
+61317*
+1 (
+
+61816*
+1 (
+
+61817*
+1 (
+
+202416*
+1 (
+
+202417*
+1 (
+
+202628*
+1 (
+
+202931*
+1 (
+
+203234*
+1 (
+
+202917*
+1 (
+
+20617*
+1 (3

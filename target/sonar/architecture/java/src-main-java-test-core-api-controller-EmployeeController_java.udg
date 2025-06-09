@@ -1,0 +1,271 @@
+
+1.0rodrigorojasg_testSpringJavaFrontend"1749498218630*java2.B¦
+C
+>src/main/java/test/core/api/controller/EmployeeController.java2
+
+package4
+
+test.core.api.controller5
+0
++test.core.api.controller.EmployeeController7
+
+
+class8
+
+access9
+
+public10
+
+simple name11
+
+EmployeeController12
+<
+6org.springframework.web.bind.annotation.RestController14
+
+unknown15
+
+annotated by16
+
+
+uses17
+A
+;test.core.api.controller.EmployeeController.employeeService19
+
+field20
+
+private21
+
+employeeService22
++
+%test.core.api.service.EmployeeService24
+
+is type25
+<
+6org.springframework.beans.factory.annotation.Autowired27
+{
+utest.core.api.controller.EmployeeController#deleteEmployee(Ljava/lang/Long;)Lorg/springframework/http/ResponseEntity;29
+
+method30
+
+deleteEmployee31
+-
+'org.springframework.http.ResponseEntity33
+
+returns34
+;
+5org.springframework.web.bind.annotation.DeleteMapping36
+:
+4org.springframework.web.bind.annotation.PathVariable38
+
+
+references39
+M
+Gtest.core.api.service.EmployeeService#deleteEmployee(Ljava/lang/Long;)V41
+
+calls42
+<
+6org.springframework.http.ResponseEntity$HeadersBuilder44
+m
+gorg.springframework.http.ResponseEntity$HeadersBuilder#build()Lorg/springframework/http/ResponseEntity;46
+9
+3org.springframework.http.ResponseEntity$BodyBuilder48
+g
+aorg.springframework.http.ResponseEntity#ok()Lorg/springframework/http/ResponseEntity$BodyBuilder;50
+^
+Xtest.core.api.controller.EmployeeController#getEmployeesBornBefore2000()Ljava/util/List;52
+ 
+getEmployeesBornBefore200053
+8
+2org.springframework.web.bind.annotation.GetMapping55
+"
+test.core.api.model.Employee57
+X
+Rtest.core.api.service.EmployeeService#getEmployeesBornBefore2000()Ljava/util/List;59J
+
+1
+12Z
+
+3	
+354j™
+
+37
+373815
+
+49
+495015
+
+56
+565715
+@
+18:
+181920 *
+1 (26:3B
+	
+9
+21
+
+
+11
+22
+9
+64
+678 *
+1 ( :3B
+	
+9
+10
+
+
+11
+12
+
+26
+262715
+
+45
+454615
+
+47
+474815
+@
+51:
+515230 *
+1 (26:3B
+	
+9
+10
+
+
+11
+53
+
+13
+131415
+
+23
+232415
+
+58
+585915
+
+40
+404115
+
+54
+545515
+
+32
+323315
+
+43
+434415
+
+35
+353615
+@
+28:
+282930 *
+1 (26:3B
+	
+9
+10
+
+
+11
+31rÞ
+
+61316*
+1 (
+
+61317*
+1 (
+
+182325*
+1 (
+
+182616*
+1 (
+
+182617*
+1 (
+
+182317*
+1 (
+
+182317*
+1 (,
+
+283234*
+1 (
+
+283516*
+1 (
+
+283517*
+1 (
+
+283217*
+1 (
+
+283716*
+10 (1
+
+283717*
+11 (=
+
+282339*
+1	 (
+
+284042*
+1 ('
+
+281839*
+1	 (
+
+282317*
+1	 (
+
+281839*
+1	 (
+
+283234*
+1 (
+
+284339*
+1 (
+
+284542*
+1$ ()
+
+284734*
+1 (
+
+283239*
+1 (
+
+284942*
+1 (!
+
+515416*
+1 (
+
+515417*
+1 (
+
+515617*
+1 (
+
+512339*
+1 (
+
+515842*
+1  (:
+
+511839*
+1 (
+
+512317*
+1 (
+
+511839*
+1 (

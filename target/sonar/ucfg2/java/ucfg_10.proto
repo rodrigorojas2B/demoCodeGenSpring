@@ -1,0 +1,40 @@
+
+6__sonar_lambda_0$test.core.api.service.EmployeeServiceŠ
+/home/runner/work/demoCodeGenSpring/demoCodeGenSpring/repositorio-base/src/main/java/test/core/api/service/EmployeeService.javaH (‡"startingBlock*ª
+startingBlock	H (‡ˆ
+…
+
+__unknown_file (
+idjava.lang.Long"__id*M
+
+__unknown_file (1*/'
+%test.core.api.service.EmployeeService"
+id*
+1*ö
+1	k (|
+z
+	k (†
+%3java.lang.String"__concat*%
+	k (
+Invalid employee Id:*$
+
+„ (†
+
+idjava.lang.LongZX
+R (j(
+%4"java.lang.IllegalArgumentException""java.lang.IllegalArgumentExceptionÒ
+Ï
+	N (‡
+%5">java.lang.IllegalArgumentException#<init>(Ljava/lang/String;)V*F
+
+__unknown_file (*
+(
+%4"java.lang.IllegalArgumentException*4
+
+__unknown_file (
+
+%3java.lang.String"7
+	N (‡*
+(
+%4"java.lang.IllegalArgumentExceptionB
+java.util.function.Supplier

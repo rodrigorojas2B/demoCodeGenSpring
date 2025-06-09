@@ -1,0 +1,21 @@
+
+Xtest.core.api.controller.EmployeeController#getEmployeesBornBefore2000()Ljava/util/List;ê
+Ö/home/runner/work/demoCodeGenSpring/demoCodeGenSpring/repositorio-base/src/main/java/test/core/api/controller/EmployeeController.java (4"1*π
+1 (¢
+ü
+ (+
+%0%test.core.api.service.EmployeeService"__id*`
+
+__unknown_file (D*B-
++test.core.api.controller.EmployeeController"
+employeeService‡›
+ (;
+%1java.util.List"Rtest.core.api.service.EmployeeService#getEmployeesBornBefore2000()Ljava/util/List;*I
+
+__unknown_file (-
++
+%0%test.core.api.service.EmployeeService2getEmployeesBornBefore2000()""
+ (<
+
+%1java.util.ListB/-
++test.core.api.controller.EmployeeControllerH

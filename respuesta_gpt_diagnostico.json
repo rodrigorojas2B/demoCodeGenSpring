@@ -1,0 +1,36 @@
+{
+  "id": "chatcmpl-Bgcev9kgeaWnsz5pgGAOHwA5P3syG",
+  "object": "chat.completion",
+  "created": 1749498081,
+  "model": "gpt-4-0613",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "--- ANÁLISIS DE CLASES EXISTENTES ---\n\n| Clase Java | Package | Clasificación | Motivo |\n|------------|---------|----------------|--------|\n| Employee | test.core.api.model | REUTILIZABLE-AS-IS | Contiene atributos `gender` y `birthDate` necesarios para las validaciones |\n| EmployeeRepository | test.core.api.repository | REUTILIZABLE-AS-IS | Se utiliza para interactuar con la base de datos |\n| EmployeeCoreApiApplication | test.core.api | REUTILIZABLE-AS-IS | Clase principal de la aplicación |\n| EmployeeService | N/A | NUEVA | Se necesita para implementar la lógica de negocio |\n| EmployeeController | N/A | NUEVA | Se necesita para exponer los endpoints de la API |\n| InvalidDeletionException | N/A | NUEVA | Se necesita para manejar la excepción cuando se intenta eliminar un empleado femenino |\n| EmployeeServiceTest | N/A | NUEVA | Se necesita para realizar pruebas unitarias de la lógica de negocio |\n| EmployeeControllerTest | N/A | NUEVA | Se necesita para realizar pruebas unitarias de los endpoints de la API |\n\n--- INSTRUCCIONES DE MODIFICACIÓN ---\n- En la clase `EmployeeService`, se debe implementar un método `deleteEmployee` que valide el género del empleado antes de eliminarlo. Si el género es \"Femenino\", se debe lanzar una excepción `InvalidDeletionException`.\n- En la clase `EmployeeService`, se debe implementar un método `getEmployeesBornBefore2000` que retorne una lista de empleados nacidos antes del año 2000.\n- En la clase `EmployeeController`, se debe implementar un endpoint `DELETE /employees/{id}` que utilice el método `deleteEmployee` de `EmployeeService`.\n- En la clase `EmployeeController`, se debe implementar un endpoint `GET /employees/born-before-2000` que utilice el método `getEmployeesBornBefore2000` de `EmployeeService`.\n- Se deben crear las clases `EmployeeServiceTest` y `EmployeeControllerTest` para realizar pruebas unitarias de los métodos implementados en `EmployeeService` y `EmployeeController`, respectivamente.",
+        "refusal": null,
+        "annotations": []
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 1547,
+    "completion_tokens": 483,
+    "total_tokens": 2030,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "audio_tokens": 0,
+      "accepted_prediction_tokens": 0,
+      "rejected_prediction_tokens": 0
+    }
+  },
+  "service_tier": "default",
+  "system_fingerprint": null
+}
