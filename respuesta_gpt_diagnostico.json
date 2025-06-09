@@ -1,0 +1,36 @@
+{
+  "id": "chatcmpl-BgXCtrrhPBaQkCCuPatqSM23mageM",
+  "object": "chat.completion",
+  "created": 1749477123,
+  "model": "gpt-4-0613",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "--- ANÁLISIS DE CLASES EXISTENTES ---\n\n| Clase Java | Package | Clasificación | Motivo |\n|------------|---------|----------------|--------|\n| Employee | test.core.api.model | REUTILIZABLE-AS-IS | Contiene atributo `birthDate` necesario para la nueva funcionalidad |\n| EmployeeRepository | test.core.api.repository | MODIFICABLE | Se necesita agregar un nuevo método para obtener los empleados nacidos antes del año 2000 |\n| EmployeeCoreApiApplication | test.core.api | REUTILIZABLE-AS-IS | Clase principal de la aplicación, no necesita modificaciones para esta funcionalidad |\n\n--- PLAN DE MODIFICACIÓN ---\n\n1. Clase `EmployeeRepository` (MODIFICABLE): Se necesita agregar un nuevo método para obtener los empleados nacidos antes del año 2000. Este método debe devolver una lista de empleados cuya fecha de nacimiento sea anterior al año 2000.\n\n2. Crear una nueva clase `EmployeeService` en el paquete `test.core.api.service`. Esta clase debe tener un método que utilice el nuevo método del `EmployeeRepository` para obtener los empleados nacidos antes del año 2000 y devolverlos.\n\n3. Crear una nueva clase `EmployeeController` en el paquete `test.core.api.controller`. Esta clase debe tener un método que utilice el método del `EmployeeService` para obtener los empleados nacidos antes del año 2000 y devolverlos como respuesta HTTP.\n\n4. Crear una nueva clase `EmployeeServiceTest` en el paquete `test.core.api.service`. Esta clase debe contener pruebas unitarias para el método del `EmployeeService` que obtiene los empleados nacidos antes del año 2000.\n\n5. Crear una nueva clase `EmployeeControllerTest` en el paquete `test.core.api.controller`. Esta clase debe contener pruebas unitarias para el método del `EmployeeController` que obtiene los empleados nacidos antes del año 2000 y devuelve una respuesta HTTP.",
+        "refusal": null,
+        "annotations": []
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 1010,
+    "completion_tokens": 436,
+    "total_tokens": 1446,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "audio_tokens": 0,
+      "accepted_prediction_tokens": 0,
+      "rejected_prediction_tokens": 0
+    }
+  },
+  "service_tier": "default",
+  "system_fingerprint": null
+}

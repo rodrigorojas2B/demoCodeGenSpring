@@ -1,0 +1,36 @@
+{
+  "id": "chatcmpl-BgXDHHhnfLSr4IKgJtivzbQl5bbdO",
+  "object": "chat.completion",
+  "created": 1749477147,
+  "model": "gpt-4-0613",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "--- CÓDIGO JAVA ---\n\n```java\npackage test.core.api.repository;\n\nimport org.springframework.data.jpa.repository.JpaRepository;\nimport org.springframework.data.jpa.repository.Query;\nimport org.springframework.data.repository.query.Param;\nimport test.core.api.model.Employee;\n\nimport java.util.Date;\nimport java.util.List;\n\npublic interface EmployeeRepository extends JpaRepository<Employee, Long> {\n    @Query(\"SELECT e FROM Employee e WHERE e.birthDate < :date\")\n    List<Employee> findEmployeesBornBefore(@Param(\"date\") Date date);\n}\n```\n\n```java\npackage test.core.api.service;\n\nimport org.springframework.beans.factory.annotation.Autowired;\nimport org.springframework.stereotype.Service;\nimport test.core.api.model.Employee;\nimport test.core.api.repository.EmployeeRepository;\n\nimport java.util.Calendar;\nimport java.util.Date;\nimport java.util.List;\n\n@Service\npublic class EmployeeService {\n\n    @Autowired\n    private EmployeeRepository employeeRepository;\n\n    public List<Employee> getEmployeesBornBefore2000() {\n        Calendar cal = Calendar.getInstance();\n        cal.set(Calendar.YEAR, 2000);\n        cal.set(Calendar.DAY_OF_YEAR, 1);\n        Date date = cal.getTime();\n\n        return employeeRepository.findEmployeesBornBefore(date);\n    }\n}\n```\n\n```java\npackage test.core.api.controller;\n\nimport org.springframework.beans.factory.annotation.Autowired;\nimport org.springframework.http.ResponseEntity;\nimport org.springframework.web.bind.annotation.GetMapping;\nimport org.springframework.web.bind.annotation.RequestMapping;\nimport org.springframework.web.bind.annotation.RestController;\nimport test.core.api.model.Employee;\nimport test.core.api.service.EmployeeService;\n\nimport java.util.List;\n\n@RestController\n@RequestMapping(\"/api/employees\")\npublic class EmployeeController {\n\n    @Autowired\n    private EmployeeService employeeService;\n\n    @GetMapping(\"/born-before-2000\")\n    public ResponseEntity<List<Employee>> getEmployeesBornBefore2000() {\n        List<Employee> employees = employeeService.getEmployeesBornBefore2000();\n        return ResponseEntity.ok(employees);\n    }\n}\n```\n\n```java\npackage test.core.api.service;\n\nimport org.junit.jupiter.api.Test;\nimport org.springframework.beans.factory.annotation.Autowired;\nimport org.springframework.boot.test.context.SpringBootTest;\nimport test.core.api.model.Employee;\n\nimport java.util.List;\n\nimport static org.junit.jupiter.api.Assertions.assertTrue;\n\n@SpringBootTest\npublic class EmployeeServiceTest {\n\n    @Autowired\n    private EmployeeService employeeService;\n\n    @Test\n    public void testGetEmployeesBornBefore2000() {\n        List<Employee> employees = employeeService.getEmployeesBornBefore2000();\n        assertTrue(employees.stream().allMatch(e -> e.getBirthDate().getYear() < 2000));\n    }\n}\n```\n\n```java\npackage test.core.api.controller;\n\nimport org.junit.jupiter.api.Test;\nimport org.springframework.beans.factory.annotation.Autowired;\nimport org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;\nimport org.springframework.boot.test.context.SpringBootTest;\nimport org.springframework.test.web.servlet.MockMvc;\n\nimport static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;\nimport static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;\n\n@SpringBootTest\n@AutoConfigureMockMvc\npublic class EmployeeControllerTest {\n\n    @Autowired\n    private MockMvc mockMvc;\n\n    @Test\n    public void testGetEmployeesBornBefore2000() throws Exception {\n        mockMvc.perform(get(\"/api/employees/born-before-2000\"))\n                .andExpect(status().isOk());\n    }\n}\n```",
+        "refusal": null,
+        "annotations": []
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 913,
+    "completion_tokens": 659,
+    "total_tokens": 1572,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "audio_tokens": 0,
+      "accepted_prediction_tokens": 0,
+      "rejected_prediction_tokens": 0
+    }
+  },
+  "service_tier": "default",
+  "system_fingerprint": null
+}

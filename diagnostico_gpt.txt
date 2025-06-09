@@ -1,0 +1,19 @@
+--- ANÁLISIS DE CLASES EXISTENTES ---
+
+| Clase Java | Package | Clasificación | Motivo |
+|------------|---------|----------------|--------|
+| Employee | test.core.api.model | REUTILIZABLE-AS-IS | Contiene atributo `birthDate` necesario para la nueva funcionalidad |
+| EmployeeRepository | test.core.api.repository | MODIFICABLE | Se necesita agregar un nuevo método para obtener los empleados nacidos antes del año 2000 |
+| EmployeeCoreApiApplication | test.core.api | REUTILIZABLE-AS-IS | Clase principal de la aplicación, no necesita modificaciones para esta funcionalidad |
+
+--- PLAN DE MODIFICACIÓN ---
+
+1. Clase `EmployeeRepository` (MODIFICABLE): Se necesita agregar un nuevo método para obtener los empleados nacidos antes del año 2000. Este método debe devolver una lista de empleados cuya fecha de nacimiento sea anterior al año 2000.
+
+2. Crear una nueva clase `EmployeeService` en el paquete `test.core.api.service`. Esta clase debe tener un método que utilice el nuevo método del `EmployeeRepository` para obtener los empleados nacidos antes del año 2000 y devolverlos.
+
+3. Crear una nueva clase `EmployeeController` en el paquete `test.core.api.controller`. Esta clase debe tener un método que utilice el método del `EmployeeService` para obtener los empleados nacidos antes del año 2000 y devolverlos como respuesta HTTP.
+
+4. Crear una nueva clase `EmployeeServiceTest` en el paquete `test.core.api.service`. Esta clase debe contener pruebas unitarias para el método del `EmployeeService` que obtiene los empleados nacidos antes del año 2000.
+
+5. Crear una nueva clase `EmployeeControllerTest` en el paquete `test.core.api.controller`. Esta clase debe contener pruebas unitarias para el método del `EmployeeController` que obtiene los empleados nacidos antes del año 2000 y devuelve una respuesta HTTP.
