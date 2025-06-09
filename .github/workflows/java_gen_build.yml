@@ -251,7 +251,9 @@ jobs:
           sed -i '/^.*Clase.*nueva.*$/d' clases_generadas.java
           sed -i '/^.*Pruebas.*$/d' clases_generadas.java
 
-      
+          echo "📝 Contenido completo de clases_generadas.java:"
+          cat clases_generadas.java
+
           # === ELIMINAR LÍNEAS ANTES DEL PRIMER package ===
           sed -i '1,/^package /{/^package /!d}' clases_generadas.java
       
