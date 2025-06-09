@@ -1,0 +1,36 @@
+{
+  "id": "chatcmpl-BgYiHmrKZHCTJwwWH9IyzqW55LnoH",
+  "object": "chat.completion",
+  "created": 1749482913,
+  "model": "gpt-4-0613",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "--- CÓDIGO JAVA ---\n\n```java\npackage test.core.api.repository;\n\nimport org.springframework.data.jpa.repository.JpaRepository;\nimport org.springframework.data.jpa.repository.Query;\nimport org.springframework.data.repository.query.Param;\nimport test.core.api.model.Employee;\n\nimport java.time.LocalDate;\nimport java.util.List;\n\npublic interface EmployeeRepository extends JpaRepository<Employee, Long> {\n\n    @Query(\"SELECT e FROM Employee e WHERE e.birthDate < :date\")\n    List<Employee> findAllBornBefore(@Param(\"date\") LocalDate date);\n}\n```\n\n```java\npackage test.core.api.service;\n\nimport org.springframework.beans.factory.annotation.Autowired;\nimport org.springframework.stereotype.Service;\nimport test.core.api.model.Employee;\nimport test.core.api.repository.EmployeeRepository;\n\nimport java.time.LocalDate;\nimport java.util.List;\n\n@Service\npublic class EmployeeService {\n\n    private final EmployeeRepository employeeRepository;\n\n    @Autowired\n    public EmployeeService(EmployeeRepository employeeRepository) {\n        this.employeeRepository = employeeRepository;\n    }\n\n    public List<Employee> getEmployeesBornBefore2000() {\n        return employeeRepository.findAllBornBefore(LocalDate.of(2000, 1, 1));\n    }\n}\n```\n\n```java\npackage test.core.api.controller;\n\nimport org.springframework.beans.factory.annotation.Autowired;\nimport org.springframework.web.bind.annotation.GetMapping;\nimport org.springframework.web.bind.annotation.RequestMapping;\nimport org.springframework.web.bind.annotation.RestController;\nimport test.core.api.model.Employee;\nimport test.core.api.service.EmployeeService;\n\nimport java.util.List;\n\n@RestController\n@RequestMapping(\"/api/employees\")\npublic class EmployeeController {\n\n    private final EmployeeService employeeService;\n\n    @Autowired\n    public EmployeeController(EmployeeService employeeService) {\n        this.employeeService = employeeService;\n    }\n\n    @GetMapping(\"/born-before-2000\")\n    public List<Employee> getEmployeesBornBefore2000() {\n        return employeeService.getEmployeesBornBefore2000();\n    }\n}\n```\n\n```java\npackage test.core.api.service;\n\nimport org.junit.jupiter.api.Test;\nimport org.mockito.InjectMocks;\nimport org.mockito.Mock;\nimport org.mockito.Mockito;\nimport org.springframework.boot.test.context.SpringBootTest;\nimport test.core.api.model.Employee;\nimport test.core.api.repository.EmployeeRepository;\n\nimport java.time.LocalDate;\nimport java.util.Arrays;\nimport java.util.List;\n\nimport static org.junit.jupiter.api.Assertions.assertEquals;\n\n@SpringBootTest\npublic class EmployeeServiceTest {\n\n    @Mock\n    private EmployeeRepository employeeRepository;\n\n    @InjectMocks\n    private EmployeeService employeeService;\n\n    @Test\n    public void testGetEmployeesBornBefore2000() {\n        Employee emp1 = new Employee();\n        emp1.setBirthDate(LocalDate.of(1990, 1, 1));\n        Employee emp2 = new Employee();\n        emp2.setBirthDate(LocalDate.of(1980, 1, 1));\n        List<Employee> employees = Arrays.asList(emp1, emp2);\n\n        Mockito.when(employeeRepository.findAllBornBefore(LocalDate.of(2000, 1, 1))).thenReturn(employees);\n\n        List<Employee> result = employeeService.getEmployeesBornBefore2000();\n\n        assertEquals(2, result.size());\n        assertEquals(employees, result);\n    }\n}\n```\n\n```java\npackage test.core.api.controller;\n\nimport org.junit.jupiter.api.Test;\nimport org.mockito.InjectMocks;\nimport org.mockito.Mock;\nimport org.mockito.Mockito;\nimport org.springframework.boot.test.context.SpringBootTest;\nimport org.springframework.boot.test.mock.mockito.MockBean;\nimport test.core.api.model.Employee;\nimport test.core.api.service.EmployeeService;\n\nimport java.time.LocalDate;\nimport java.util.Arrays;\nimport java.util.List;\n\nimport static org.junit.jupiter.api.Assertions.assertEquals;\n\n@SpringBootTest\npublic class EmployeeControllerTest {\n\n    @MockBean\n    private EmployeeService employeeService;\n\n    @InjectMocks\n    private EmployeeController employeeController;\n\n    @Test\n    public void testGetEmployeesBornBefore2000() {\n        Employee emp1 = new Employee();\n        emp1.setBirthDate(LocalDate.of(1990, 1, 1));\n        Employee emp2 = new Employee();\n        emp2.setBirthDate(LocalDate.of(1980, 1, 1));\n        List<Employee> employees = Arrays.asList(emp1, emp2);\n\n        Mockito.when(employeeService.getEmployeesBornBefore2000()).thenReturn(employees);\n\n        List<Employee> result = employeeController.getEmployeesBornBefore2000();\n\n        assertEquals(2, result.size());\n        assertEquals(employees, result);\n    }\n}\n```",
+        "refusal": null,
+        "annotations": []
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 937,
+    "completion_tokens": 877,
+    "total_tokens": 1814,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "audio_tokens": 0,
+      "accepted_prediction_tokens": 0,
+      "rejected_prediction_tokens": 0
+    }
+  },
+  "service_tier": "default",
+  "system_fingerprint": null
+}

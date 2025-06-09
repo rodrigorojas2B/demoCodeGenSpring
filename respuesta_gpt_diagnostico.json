@@ -1,0 +1,36 @@
+{
+  "id": "chatcmpl-BgYhwsr8CbAg0izLZV1akpQqZxEwT",
+  "object": "chat.completion",
+  "created": 1749482892,
+  "model": "gpt-4-0613",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "--- ANÁLISIS DE CLASES EXISTENTES ---\n\n| Clase Java | Package | Clasificación | Motivo |\n|------------|---------|----------------|--------|\n| Employee | test.core.api.model | REUTILIZABLE-AS-IS | Contiene atributo `birthDate` necesario para la nueva funcionalidad |\n| EmployeeRepository | test.core.api.repository | MODIFICABLE | Se necesita agregar un nuevo método para obtener empleados nacidos antes del año 2000 |\n| EmployeeCoreApiApplication | test.core.api | REUTILIZABLE-AS-IS | Clase principal de la aplicación, no necesita modificaciones para esta funcionalidad |\n\n--- PLAN DE MODIFICACIÓN ---\n\n1. Clase `EmployeeRepository` (test.core.api.repository): Se necesita agregar un nuevo método para obtener los empleados que nacieron antes del año 2000. Este método debe devolver una lista de empleados y aceptar un parámetro de tipo `LocalDate` que represente la fecha límite (01-01-2000).\n\n2. Crear una nueva clase `EmployeeService` (test.core.api.service): Esta clase debe contener la lógica de negocio para obtener los empleados que nacieron antes del año 2000. Debe tener un método que utilice el nuevo método del repositorio `EmployeeRepository`.\n\n3. Crear una nueva clase `EmployeeController` (test.core.api.controller): Esta clase debe manejar las solicitudes HTTP para obtener los empleados que nacieron antes del año 2000. Debe tener un método que mapee a una URL específica y que utilice el método del servicio `EmployeeService`.\n\n4. Crear una nueva clase `EmployeeServiceTest` (test.core.api.service): Esta clase debe contener las pruebas unitarias para el servicio `EmployeeService`. Debe probar que el método del servicio devuelve los resultados esperados.\n\n5. Crear una nueva clase `EmployeeControllerTest` (test.core.api.controller): Esta clase debe contener las pruebas unitarias para el controlador `EmployeeController`. Debe probar que el método del controlador devuelve los resultados esperados y maneja correctamente las solicitudes HTTP.",
+        "refusal": null,
+        "annotations": []
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 1010,
+    "completion_tokens": 460,
+    "total_tokens": 1470,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "audio_tokens": 0,
+      "accepted_prediction_tokens": 0,
+      "rejected_prediction_tokens": 0
+    }
+  },
+  "service_tier": "default",
+  "system_fingerprint": null
+}

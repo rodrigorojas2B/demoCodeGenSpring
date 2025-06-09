@@ -1,0 +1,40 @@
+--- HISTORIA DE USUARIO ---
+nombre: Obtener empleados nacidos antes del año 2000
+como: Administrador del sistema
+quiero: Obtener una lista de empleados que hayan nacido antes del año 2000
+para: Poder segmentar a los empleados   por generaciones y aplicar políticas diferenciadas
+
+--- DIAGNÓSTICO Y PLAN DE CLASES ---
+--- ANÁLISIS DE CLASES EXISTENTES ---
+
+| Clase Java | Package | Clasificación | Motivo |
+|------------|---------|----------------|--------|
+| Employee | test.core.api.model | REUTILIZABLE-AS-IS | Contiene atributo `birthDate` necesario para la nueva funcionalidad |
+| EmployeeRepository | test.core.api.repository | MODIFICABLE | Se necesita agregar un nuevo método para obtener empleados nacidos antes del año 2000 |
+| EmployeeCoreApiApplication | test.core.api | REUTILIZABLE-AS-IS | Clase principal de la aplicación, no necesita modificaciones para esta funcionalidad |
+
+--- PLAN DE MODIFICACIÓN ---
+
+1. Clase `EmployeeRepository` (test.core.api.repository): Se necesita agregar un nuevo método para obtener los empleados que nacieron antes del año 2000. Este método debe devolver una lista de empleados y aceptar un parámetro de tipo `LocalDate` que represente la fecha límite (01-01-2000).
+
+2. Crear una nueva clase `EmployeeService` (test.core.api.service): Esta clase debe contener la lógica de negocio para obtener los empleados que nacieron antes del año 2000. Debe tener un método que utilice el nuevo método del repositorio `EmployeeRepository`.
+
+3. Crear una nueva clase `EmployeeController` (test.core.api.controller): Esta clase debe manejar las solicitudes HTTP para obtener los empleados que nacieron antes del año 2000. Debe tener un método que mapee a una URL específica y que utilice el método del servicio `EmployeeService`.
+
+4. Crear una nueva clase `EmployeeServiceTest` (test.core.api.service): Esta clase debe contener las pruebas unitarias para el servicio `EmployeeService`. Debe probar que el método del servicio devuelve los resultados esperados.
+
+5. Crear una nueva clase `EmployeeControllerTest` (test.core.api.controller): Esta clase debe contener las pruebas unitarias para el controlador `EmployeeController`. Debe probar que el método del controlador devuelve los resultados esperados y maneja correctamente las solicitudes HTTP.
+
+--- INSTRUCCIONES DE GENERACIÓN DE CÓDIGO ---
+- Modifica únicamente las clases marcadas como MODIFICABLE.
+- Crea nuevas clases solo si están indicadas como NUEVA.
+- No cambies de paquete ni nombre de clase.
+- Si modificas un método, inclúyelo completo con su lógica anterior más la nueva.
+- No omitas lógica existente.
+- Cada clase debe comenzar con `package ...`.
+- Devuelve únicamente clases y tests JUnit 5 válidos.
+- No incluyas explicaciones ni comentarios adicionales.
+- Si una clase existente implementa una interfaz, o hereda de otra clase, debes mantener esa declaración `implements o extends ...`.
+- No elimines implementaciones de interfaces ya declaradas.
+- La firma de las clases y métodos debe mantenerse sin cambio a menos que la nueva funcionalidad lo requiera
+
