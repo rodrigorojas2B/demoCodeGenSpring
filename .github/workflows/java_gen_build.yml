@@ -179,7 +179,7 @@ jobs:
           - La firma de las clases y métodos debe mantenerse sin cambio a menos que la nueva funcionalidad lo requiera
           - Si se crea una llamada a un método de la clase modificada asegúrate que ese método exista en la clase
           - Si se crea una llamada a un método de otra clase asegúrate que ese método exista en la clase o créalo de ser necesario
-
+          - Asegurate que el el código generado sea compilable, corríjelo hasta que lo sea
           EOF
 
 
