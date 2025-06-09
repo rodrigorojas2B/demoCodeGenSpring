@@ -222,6 +222,12 @@ jobs:
           | sed '/^```/d' \
           > clases_generadas.java
 
+          echo "📄 Código generado completo por GPT antes de limpieza:"
+          echo "--------------------------------------------------------"
+          cat clases_generadas.java
+          echo "--------------------------------------------------------"
+
+
       - name: Limpiar y separar clases generadas
         run: |
           cd repositorio-base
