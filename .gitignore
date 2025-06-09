@@ -1,0 +1,37 @@
+# === Maven ===
+/target/
+!.mvn/wrapper/maven-wrapper.jar
+.mvn/wrapper/maven-wrapper.properties
+.mvn/wrapper/MavenWrapperDownloader.java
+
+# === Sonar ===
+/.sonar/
+/.reports/
+/report*.json
+reporte_original.json
+reporte_mejorado.json
+archivos_afectados.txt
+
+# === Clases generadas automáticamente ===
+/ai/generated/
+/src/main/java/ai/generated/
+/src/test/java/ai/generated/
+/clase_*.java
+clases_generadas.java
+
+# === IDEs y entorno local ===
+*.log
+*.iml
+*.class
+.idea/
+*.swp
+*.swo
+*.bak
+
+# === GitHub Actions temporal ===
+*.pid
+*.out
+
+# === Sistema operativo ===
+.DS_Store
+Thumbs.db
