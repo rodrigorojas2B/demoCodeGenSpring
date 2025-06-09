@@ -387,8 +387,7 @@ jobs:
           done
 
           echo "🧽 Eliminando residuos de generación..."
-          rm -rf src/main/java/ai/generated/*
-          rm -rf src/test/java/ai/generated/*
+
           rm -f clase_*.java clases_generadas.java
 
 
@@ -397,6 +396,11 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           cd repositorio-base
+
+          # 🧽 Borrar clases residuales antes del build
+          echo "🧽 Eliminando clases generadas temporales para compilar solo la versión final..."
+          rm -rf src/main/java/ai/generated/*
+          rm -rf src/test/java/ai/generated/*
       
           intentos=0
           exito=0
