@@ -459,7 +459,7 @@ jobs:
       
             CODIGO_CONTENT+=$'\n\n--- INSTRUCCIONES ---\n'
             CODIGO_CONTENT+="Corrige el código entregado según el plan anterior. Devuelve solo código Java válido. "
-            CODIGO_CONTENT+="No modifiques código que no falla según el log de compilación"
+            CODIGO_CONTENT+="Sólo modifica las clases indicadas de acuerdo al plan anterior (archivo afectado). No modifiques otras clases de no ser estrictamente necesario"
             CODIGO_CONTENT+="Cada clase debe comenzar con 'package ...'. No uses backticks. No incluyas explicaciones."
       
             jq -n \
