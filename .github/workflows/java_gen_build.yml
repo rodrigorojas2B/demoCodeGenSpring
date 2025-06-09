@@ -177,6 +177,8 @@ jobs:
           - Si una clase existente implementa una interfaz, o hereda de otra clase, debes mantener esa declaración `implements o extends ...`.
           - No elimines implementaciones de interfaces ya declaradas.
           - La firma de las clases y métodos debe mantenerse sin cambio a menos que la nueva funcionalidad lo requiera
+          - Si se crea una llamada a un método de la clase modificada asegúrate que ese método exista en la clase
+          - Si se crea una llamada a un método de otra clase asegúrate que ese método exista en la clase o créalo de ser necesario
 
           EOF
 
@@ -459,6 +461,7 @@ jobs:
       
             CODIGO_CONTENT+=$'\n\n--- INSTRUCCIONES ---\n'
             CODIGO_CONTENT+="Corrige el código entregado según el plan anterior. Devuelve solo código Java válido. "
+            CODIGO_CONTENT+="No modifiques código que no falla según el log de compilación"
             CODIGO_CONTENT+="Cada clase debe comenzar con 'package ...'. No uses backticks. No incluyas explicaciones."
       
             jq -n \

@@ -13,7 +13,6 @@ criterios_aceptacion:
   - Se deben mantener todos los métodos actuales sin eliminación ni reemplazo.
   - La modificación debe estar delimitada por comentarios que indiquen claramente el inicio y fin del cambio realizado por la IA.
 
-
 id: HDU-EMP-002
 titulo: Empleados nacidos antes del 2000
 actor: Administrador del sistema
