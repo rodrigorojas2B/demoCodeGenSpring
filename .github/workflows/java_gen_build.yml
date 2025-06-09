@@ -511,6 +511,7 @@ jobs:
       
       - name: Análisis original con SonarCloud
         if: success()  # Solo si la compilación fue exitosa
+        working-directory: repositorio-base
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
