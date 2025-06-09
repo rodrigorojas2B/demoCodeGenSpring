@@ -107,6 +107,7 @@ jobs:
           - NO eliminar los métodos existentes a menos que sea necesario
           - NO reemplazar métodos u otro contenido de las clases existentes por comentarios entre líneas
           - Solo considerar como existente una clase si está listada explícitamente en "CLASES DISPONIBLES EN EL PROYECTO".
+          - No debes asumir la existencia de clases que no aparecen explícitamente en la sección anterior. Si alguna clase no está listada entre las clases disponibles ni aparece en el código entregado, debe considerarse INEXISTENTE y marcada como NUEVA en el análisis.
           - Si una clase no aparece listada, asumir que es NUEVA.
           - Si una clase herada de otra clase o importa una interfaz propia del proyecto asegúrate que esta esté entre las clases existentes o genera el código respectivo de no existir previamente
       
@@ -122,7 +123,7 @@ jobs:
         run: |
           cd repositorio-base
 
-          jq -Rs --arg SYSTEM_MSG "Eres un analizador experto de código Java. Devuelve solo el análisis de clases existentes y el plan de modificación. No devuelvas código aún." '{
+          jq -Rs --arg SYSTEM_MSG "Eres un analista de clases Java que trabaja exclusivamente con los archivos entregados a continuación. No supongas la existencia de clases que no se proporcionan. Si una clase no aparece explícitamente, debe asumirse como no existente. No devuelvas código aún, solo análisis y tabla." '{
             model: "gpt-4",
             messages: [
               { "role": "system", "content": $SYSTEM_MSG },
