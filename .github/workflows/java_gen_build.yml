@@ -205,72 +205,84 @@ jobs:
           | sed '/^```/d' \
           > clases_generadas.java
 
-      - name: Limpiar y separar clases generadas
+      - name: Postproceso y limpieza de clases generadas
         run: |
           cd repositorio-base
 
-          echo "🧹 Limpiando residuos de formato GPT..."
+          echo "🧹 Limpieza de residuos GPT en clases_generadas.java..."
+
+          # Eliminar comentarios, delimitadores de GPT, markdown, etc.
           sed -i '/^```/d' clases_generadas.java
-          sed -i '/^---/d' clases_generadas.java
           sed -i '/^# .*$/d' clases_generadas.java
+          sed -i '/^---/d' clases_generadas.java
           sed -i '/^\/\/ Clase /d' clases_generadas.java
           sed -i '/^\/\/ Resto de los métodos existentes/d' clases_generadas.java
           sed -i '/^[0-9]\+\.\s\+Clase/d' clases_generadas.java
           sed -i '/^[0-9]\+\.\s\+Pruebas/d' clases_generadas.java
-          sed -i '${/^$/d;}' clases_generadas.java
 
-          # ✅ Cortar en la última llave para evitar basura después de clases
-          awk 'BEGIN{out=1} /^\s*}\s*$/ {print; out=0} out' clases_generadas.java > clases_generadas_tmp.java
-          mv clases_generadas_tmp.java clases_generadas.java
+          # ✂️ Cortar el archivo después de la primera llave de cierre real
+          awk 'BEGIN{p=1} /^\s*}\s*$/ && p==1 {print; p=0; next} p==1 {print}' clases_generadas.java > tmp_limpio.java
+          mv tmp_limpio.java clases_generadas.java
 
-          echo "📂 Separando clases en archivos individuales..."
+          echo "📂 Separando clases individuales..."
           rm -f clase_*.java
+          csplit --quiet --prefix=clase_ --suffix-format=%02d.java clases_generadas.java "/^package /" {*}
+
+          echo "🧽 Eliminando carpetas ai/generated previas..."
+          rm -rf src/main/java/ai/generated/*
+          rm -rf src/test/java/ai/generated/*
+
           mkdir -p src/main/java/ai/generated
           mkdir -p src/test/java/ai/generated
 
-          csplit --quiet --prefix=clase_ --suffix-format=%02d.java clases_generadas.java "/^package /" {*}
-
           for file in clase_*.java; do
-            echo "🔍 Analizando archivo: $file"
+            echo "🔍 Validando $file..."
 
-            # Validar que contiene una declaración válida
+            # Validar package
             if ! grep -qE '^\s*package\s+[a-zA-Z0-9_.]+;' "$file"; then
-              echo "⚠️ $file no tiene package válido. Eliminando."
+              echo "⚠️ Sin package válido. Eliminando $file."
               rm "$file"
               continue
             fi
 
+            # Validar declaración de clase/interface/enum
             if ! grep -qE '\b(class|interface|enum)\b' "$file"; then
-              echo "⚠️ $file no tiene clase/interfaz/enum. Eliminando."
+              echo "⚠️ Sin declaración de clase/interface. Eliminando $file."
               rm "$file"
               continue
             fi
 
-            # Validar finalización en llave de cierre
+            # Cortar después de la primera llave de cierre
+            awk 'BEGIN{p=1} /^\s*}\s*$/ && p==1 {print; p=0; next} p==1 {print}' "$file" > "$file.cleaned"
+            mv "$file.cleaned" "$file"
+
+            # Validar cierre final
             last_line=$(tail -n 1 "$file" | tr -d '[:space:]')
             if [ "$last_line" != "}" ]; then
-              echo "⚠️ $file no termina con llave de cierre. Eliminando."
+              echo "⚠️ $file no termina con '}'. Eliminando."
               rm "$file"
               continue
             fi
 
-            # Detectar nombre de clase
+            # Detectar destino
+            package_line=$(grep '^package ' "$file" | head -n 1)
+            package_path=$(echo "$package_line" | sed -E 's/package ([a-zA-Z0-9_.]+);/\1/' | tr '.' '/')
             class_name=$(grep -oP 'public\s+(class|interface|enum)\s+\K\w+' "$file" | head -n 1)
-            [ -z "$class_name" ] && echo "⚠️ No se pudo extraer nombre. Eliminando $file." && rm "$file" && continue
 
             if grep -q '@Test' "$file"; then
-              dest="src/test/java/ai/generated"
+              dest="src/test/java/$package_path"
             else
-              dest="src/main/java/ai/generated"
+              dest="src/main/java/$package_path"
             fi
 
-            mv "$file" "$dest/${class_name}.java"
-            echo "✅ Movido: $file -> $dest/${class_name}.java"
+            mkdir -p "$dest"
+            mv "$file" "$dest/$class_name.java"
+            echo "✅ $file → $dest/$class_name.java"
           done
 
-          # ❌ Eliminar residuos
-          echo "🧽 Limpiando copias temporales y residuos..."
-          rm -f clase_*.java
+          echo "🧽 Limpieza final de temporales..."
+          rm -f clase_*.java clases_generadas.java
+
 
 
       - name: Fusionar clases generadas con las originales (si existen)
