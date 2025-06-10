@@ -714,6 +714,7 @@ jobs:
           
 
       - name: Comparar resultados de análisis
+        working-directory: repositorio-base
         id: comparar_errores
         run: |
           echo "📊 Comparación de severidades:"
