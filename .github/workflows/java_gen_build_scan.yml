@@ -404,46 +404,25 @@ jobs:
             echo "❌ Falló la compilación. Capturando errores..."
             mvn compile > error_build.log 2>&1 || true
       
-            echo "🧠 Análisis de error con GPT (Diagnóstico)..."
-      
-            DIAG_CONTENT=$'--- LOG DE COMPILACIÓN FALLIDA ---\n'
-            DIAG_CONTENT+="$(cat error_build.log)"
-      
-            DIAG_CONTENT+=$'\n\n--- CÓDIGO ACTUAL CON ERROR ---\n'
-      
-            for file in $(find src/main/java -name "*.java"); do
-              if grep -q "public class " "$file"; then
-                DIAG_CONTENT+=$'\n\n--- ARCHIVO: '"$file"$' ---\n'
-                DIAG_CONTENT+="$(cat "$file")"
-                break
-              fi
-            done
-      
             echo "🧠 Análisis de error con GPT (Diagnóstico avanzado)..."
-
+      
             DIAG_CONTENT=$'--- LOG DE COMPILACIÓN FALLIDA ---\n'
             DIAG_CONTENT+="$(cat error_build.log)"
-
+      
             DIAG_CONTENT+=$'\n\n--- CONTEXTO DE CLASES DISPONIBLES ---\n'
-
-            # Agrega una versión reducida de todas las clases para que GPT vea relaciones
             for file in $(find src/main/java -name "*.java"); do
-              if grep -q "public class " "$file"; then
+              if grep -qE "public\s+(class|interface|enum)" "$file"; then
                 DIAG_CONTENT+=$'\n\n--- ARCHIVO: '"$file"$' ---\n'
-                DIAG_CONTENT+="$(head -n 80 "$file")"  # solo los primeros 80 lines para evitar tokens excesivos
+                DIAG_CONTENT+="$(head -n 80 "$file")"
               fi
             done
-
+      
             DIAG_CONTENT+=$'\n\n--- INSTRUCCIONES ---\n'
             DIAG_CONTENT+="Eres un experto compilador de Java. Analiza el log y el código entregado.\n"
             DIAG_CONTENT+="Entrega un plan de corrección claro y estructurado.\n"
-            DIAG_CONTENT+="Por cada error, indica:\n"
-            DIAG_CONTENT+="1. El archivo afectado.\n"
-            DIAG_CONTENT+="2. La línea estimada del error.\n"
-            DIAG_CONTENT+="3. La explicación del error.\n"
-            DIAG_CONTENT+="4. Las clases relacionadas que deben modificarse (si un método no existe, si hay un tipo incorrecto, etc).\n"
-            DIAG_CONTENT+="No entregues código fuente. Solo un plan detallado de acciones para corregir los errores de compilación.\n"
-
+            DIAG_CONTENT+="Por cada error, indica: archivo, línea estimada, explicación y clases relacionadas.\n"
+            DIAG_CONTENT+="No entregues código fuente. Solo un plan detallado.\n"
+      
             jq -n \
               --arg diag "$DIAG_CONTENT" \
               '{
@@ -460,17 +439,13 @@ jobs:
                 ],
                 temperature: 0.2
               }' > payload_diagnostico_errores.json
-
+      
             curl -s https://api.openai.com/v1/chat/completions \
               -H "Authorization: Bearer $OPENAI_API_KEY" \
               -H "Content-Type: application/json" \
               -d @payload_diagnostico_errores.json > respuesta_diagnostico.json
-
+      
             PLAN_CORRECCION=$(jq -r '.choices[0].message.content' respuesta_diagnostico.json)
-
-            echo "📋 Plan de corrección recibido:"
-            echo "$PLAN_CORRECCION"
-
             echo "📋 Plan de corrección recibido:"
             echo "$PLAN_CORRECCION"
       
@@ -480,25 +455,22 @@ jobs:
             CODIGO_CONTENT+="$PLAN_CORRECCION"
       
             CODIGO_CONTENT+=$'\n\n--- CÓDIGO ACTUAL CON ERROR ---\n'
-      
             for file in $(find src/main/java -name "*.java"); do
-              if grep -q "public class " "$file"; then
+              if grep -qE "public\s+(class|interface|enum)" "$file"; then
                 CODIGO_CONTENT+=$'\n\n--- ARCHIVO: '"$file"$' ---\n'
                 CODIGO_CONTENT+="$(cat "$file")"
-                break
               fi
             done
       
             CODIGO_CONTENT+=$'\n\n--- INSTRUCCIONES ---\n'
-            CODIGO_CONTENT+="Corrige el código entregado según el plan anterior. Devuelve solo clases Java válidas y listas para compilar.\n"
-            CODIGO_CONTENT+="✅ REGLAS ESTRICTAS:\n"
-            CODIGO_CONTENT+="1. Modifica exclusivamente las clases indicadas en el plan de corrección.\n"
-            CODIGO_CONTENT+="2. No elimines atributos, métodos ni importaciones existentes, a menos que esté explícitamente indicado en el plan.\n"
-            CODIGO_CONTENT+="3. Mantén intacta la estructura de cada clase.\n"
-            CODIGO_CONTENT+="4. Asegúrate de que cada clase comience con la declaración 'package ...' y contenga imports correctos.\n"
-            CODIGO_CONTENT+="5. Si agregas métodos, asegúrate de que sean consistentes con el resto del código.\n"
-            CODIGO_CONTENT+="6. No incluyas explicaciones, comentarios, ni formato Markdown. Solo clases completas listas para compilar.\n"
-
+            CODIGO_CONTENT+="Corrige el código según el plan. Devuelve solo clases completas y compilables.\n"
+            CODIGO_CONTENT+="✅ REGLAS:\n"
+            CODIGO_CONTENT+="1. Modifica exclusivamente las clases indicadas.\n"
+            CODIGO_CONTENT+="2. No elimines atributos ni métodos existentes, salvo que esté indicado.\n"
+            CODIGO_CONTENT+="3. Cada clase debe comenzar con 'package ...' y tener imports válidos.\n"
+            CODIGO_CONTENT+="4. No entregues comentarios, explicaciones, ni bloques Markdown.\n"
+            CODIGO_CONTENT+="5. Devuelve únicamente el código fuente válido, sin encabezados.\n"
+      
             jq -n \
               --arg corr "$CODIGO_CONTENT" \
               '{
@@ -506,7 +478,7 @@ jobs:
                 messages: [
                   {
                     "role": "system",
-                    "content": "Eres un generador de código Java. Devuelve solo clases completas, válidas y compilables, siguiendo instrucciones específicas."
+                    "content": "Eres un generador de código Java. Devuelve solo clases completas y compilables."
                   },
                   {
                     "role": "user",
@@ -515,15 +487,14 @@ jobs:
                 ],
                 temperature: 0.3
               }' > payload_codigo_corregido.json
-
+      
             curl -s https://api.openai.com/v1/chat/completions \
               -H "Authorization: Bearer $OPENAI_API_KEY" \
               -H "Content-Type: application/json" \
               -d @payload_codigo_corregido.json > respuesta_codigo.json
-
       
-            jq -r '.choices[0].message.content // "❌ Sin contenido válido."' respuesta_codigo.json \
-              | sed '/^```/d' > clases_generadas.java
+            jq -r '.choices[0].message.content // ""' respuesta_codigo.json \
+              | sed '/^```/d;/^--- ARCHIVO:/d;/^\s*$/d' > clases_generadas.java
       
             echo "📄 Código generado:"
             cat clases_generadas.java
@@ -552,6 +523,7 @@ jobs:
             echo "❌ Se alcanzó el máximo de intentos sin éxito"
             exit 1
           fi
+      
       
       - name: Análisis original con SonarCloud
         if: success()  # Solo si la compilación fue exitosa
