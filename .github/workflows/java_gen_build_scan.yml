@@ -741,8 +741,13 @@ jobs:
           cat severidades_antes.json
 
           echo "DESPUÉS:"
-          jq '[.issues[]?.severity] | group_by(.) | map({ (.[0]): length }) | add' reporte_mejorado.json > severidades_despues.json
-          cat severidades_despues.json
+          if [ "$(jq -r '.issues | length' reporte_mejorado.json)" -eq 0 ]; then
+            echo "No hay errores reportados" > severidades_despues.json
+            cat severidades_despues.json
+          else
+            jq '[.issues[]?.severity] | group_by(.) | map({ (.[0]): length }) | add' reporte_mejorado.json > severidades_despues.json
+            cat severidades_despues.json
+          fi
 
           puntaje_antes=$(jq '[.issues[]?.severity] |
             map(
