@@ -495,16 +495,32 @@ jobs:
               -d @payload_codigo_corregido.json > respuesta_codigo.json
       
             jq -r '.choices[0].message.content // ""' respuesta_codigo.json \
-              | sed '/^```/d;/^--- ARCHIVO:/d;/^\s*$/d' > clases_generadas.java
+              > clases_generadas.java
       
             echo "📄 Código generado:"
             cat clases_generadas.java
       
-            echo "🔄 Regenerando archivos Java..."
-            rm -f clase_*.java
+            echo "🧹 Limpiando residuos de formato GPT..."
+            sed -i '/^---/d' clases_generadas.java
+            sed -i '/^```/d' clases_generadas.java
+            sed -i '/^# .*$/d' clases_generadas.java
+            sed -i '/^\/\/ Clase de prueba:/d' clases_generadas.java
+            sed -i '/^\/\/ Clase modificada:/d' clases_generadas.java
+            sed -i '/^\/\/ Resto de los métodos existentes\.\.\./d' clases_generadas.java
+            sed -i '/^--- CLASE MODIFICADA ---/d' clases_generadas.java
+            sed -i '/^--- ARCHIVO:/d' clases_generadas.java
+            sed -i '/^[0-9]\+\.\s\+Clase/d' clases_generadas.java
+            sed -i '/^[0-9]\+\.\s\+Pruebas/d' clases_generadas.java
+            sed -i '/^.*Clase.*nueva.*$/d' clases_generadas.java
+            sed -i '/^.*Pruebas.*$/d' clases_generadas.java
+            sed -i '/^\s*$/d' clases_generadas.java
       
-            sed -i 's/`//g' clases_generadas.java
-            sed -i '1,/^package /{/^package /!d}' clases_generadas.java
+            echo "🧽 Ajustando para que el primer package sea la primera línea útil..."
+            awk 'BEGIN{found=0} /^\s*package /{found=1} found' clases_generadas.java > clases_generadas_limpio.java
+            mv clases_generadas_limpio.java clases_generadas.java
+      
+            echo "📂 Separando clases en archivos individuales..."
+            rm -f clase_*.java
             csplit --quiet --prefix=clase_ --suffix-format=%02d.java clases_generadas.java "/^package /" {*}
       
             for file in clase_*.java; do
@@ -524,7 +540,7 @@ jobs:
             echo "❌ Se alcanzó el máximo de intentos sin éxito"
             exit 1
           fi
-      
+          
       
       - name: Análisis original con SonarCloud
         if: success()  # Solo si la compilación fue exitosa
