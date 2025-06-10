@@ -778,24 +778,27 @@ jobs:
             echo "⛔ Las severidades aumentaron ($puntaje_antes → $puntaje_despues)"
           fi
     
-      - name: Commit y push de la nueva funcionalidad (si todo compila)
+      - name: Commit y push de la nueva funcionalidad (directo a main si todo compila)
         env:
           GH_PAT: ${{ secrets.GH_PAT }}
         run: |
           cd repositorio-base
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git checkout -b feature/autogenerado-${{ github.run_id }}
-
+          git checkout main
+      
+          git pull origin main  # Asegura que trabajas sobre la última versión de main
+      
           git add .
           echo "📄 Archivos listos para commitear:"
           git diff --cached --name-status || echo "⚠️ No hay cambios detectados"
-
+      
           if git diff --cached --quiet; then
             echo "⛔ No hay cambios para commitear, se omite push"
             exit 0
           fi
-
+      
           git commit -m "🤖 Funcionalidad generada desde historia de usuario"
           git remote set-url origin https://x-access-token:${GH_PAT}@github.com/${{ github.repository }}.git
-          git push origin HEAD
+          git push origin main
+      
