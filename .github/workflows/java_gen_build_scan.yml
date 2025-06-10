@@ -810,15 +810,31 @@ jobs:
       - name: Generar archivo Swagger (OpenAPI)
         working-directory: repositorio-base
         run: |
-          echo "🚀 Levantando la aplicación en segundo plano..."
+          echo "🚀 Iniciando aplicación Spring Boot en segundo plano..."
           nohup mvn spring-boot:run > app.log 2>&1 &
-          sleep 25  # ⏳ Espera a que levante
+          
+          echo "⏳ Esperando a que /v3/api-docs esté disponible..."
+          for i in {1..30}; do
+            if curl -s http://localhost:8080/v3/api-docs -o /dev/null; then
+              echo "✅ API disponible"
+              break
+            fi
+            echo "⏱️ Esperando... ($i/30)"
+            sleep 2
+          done
       
-          echo "📄 Generando archivo Swagger..."
+          if ! curl -s http://localhost:8080/v3/api-docs -o /dev/null; then
+            echo "❌ La aplicación no respondió a tiempo"
+            cat app.log || true
+            exit 1
+          fi
+      
+          echo "📄 Generando archivo OpenAPI con springdoc..."
           mvn springdoc-openapi:generate
       
           echo "✅ Archivo generado:"
           ls -lh target/openapi.*
+        
 
       - name: Subir archivo Swagger generado
         working-directory: repositorio-base
