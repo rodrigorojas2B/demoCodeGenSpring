@@ -1,0 +1,36 @@
+{
+  "id": "chatcmpl-BghZleAKxJ6R6s98VwEaZeVhtjQmr",
+  "object": "chat.completion",
+  "created": 1749516981,
+  "model": "gpt-4-0613",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "package test.core.api.service;\n\nimport org.springframework.beans.factory.annotation.Autowired;\nimport org.springframework.stereotype.Service;\nimport test.core.api.model.Employee;\nimport test.core.api.repository.EmployeeRepository;\nimport test.core.api.exception.CannotDeleteEmployeeException;\n\nimport java.util.List;\nimport java.util.stream.Collectors;\nimport java.time.LocalDate;\nimport java.time.ZoneId;\n\n@Service\npublic class EmployeeService {\n\n    @Autowired\n    private EmployeeRepository employeeRepository;\n\n    public void deleteEmployee(Long id) {\n        Employee employee = employeeRepository.findById(id).orElse(null);\n        if (employee != null) {\n            // Inicio de modificación por IA\n            if (\"Femenino\".equals(employee.getGender())) {\n                throw new CannotDeleteEmployeeException(\"No se puede eliminar un empleado de género femenino\");\n            }\n            // Fin de modificación por IA\n            employeeRepository.delete(employee);\n        }\n    }\n\n    public List<Employee> getEmployeesBornBefore2000() {\n        // Inicio de modificación por IA\n        return employeeRepository.findAll().stream()\n                .filter(employee -> employee.getBirthDate().toInstant()\n                        .atZone(ZoneId.systemDefault())\n                        .toLocalDate().getYear() < 2000)\n                .collect(Collectors.toList());\n        // Fin de modificación por IA\n    }\n}\n\npackage test.core.api.controller;\n\nimport org.springframework.beans.factory.annotation.Autowired;\nimport org.springframework.web.bind.annotation.*;\nimport test.core.api.model.Employee;\nimport test.core.api.service.EmployeeService;\n\nimport java.util.List;\n\n@RestController\n@RequestMapping(\"/api/employees\")\npublic class EmployeeController {\n\n    @Autowired\n    private EmployeeService employeeService;\n\n    @DeleteMapping(\"/{id}\")\n    public void deleteEmployee(@PathVariable Long id) {\n        employeeService.deleteEmployee(id);\n    }\n\n    @GetMapping(\"/born-before-2000\")\n    public List<Employee> getEmployeesBornBefore2000() {\n        return employeeService.getEmployeesBornBefore2000();\n    }\n}\n\npackage test.core.api.exception;\n\npublic class CannotDeleteEmployeeException extends RuntimeException {\n\n    public CannotDeleteEmployeeException(String message) {\n        super(message);\n    }\n}\n\npackage test.core.api.service;\n\nimport org.junit.jupiter.api.Test;\nimport org.junit.jupiter.api.extension.ExtendWith;\nimport org.mockito.InjectMocks;\nimport org.mockito.Mock;\nimport org.mockito.junit.jupiter.MockitoExtension;\nimport test.core.api.model.Employee;\nimport test.core.api.repository.EmployeeRepository;\nimport test.core.api.exception.CannotDeleteEmployeeException;\n\nimport java.util.Arrays;\nimport java.util.Date;\nimport java.util.GregorianCalendar;\n\nimport static org.mockito.Mockito.*;\n\n@ExtendWith(MockitoExtension.class)\npublic class EmployeeServiceTest {\n\n    @InjectMocks\n    private EmployeeService employeeService;\n\n    @Mock\n    private EmployeeRepository employeeRepository;\n\n    @Test\n    public void testDeleteFemaleEmployee() {\n        Employee employee = new Employee();\n        employee.setGender(\"Femenino\");\n        when(employeeRepository.findById(anyLong())).thenReturn(java.util.Optional.of(employee));\n\n        try {\n            employeeService.deleteEmployee(1L);\n        } catch (CannotDeleteEmployeeException e) {\n            verify(employeeRepository, times(0)).delete(any(Employee.class));\n        }\n    }\n\n    @Test\n    public void testGetEmployeesBornBefore2000() {\n        Employee employee1 = new Employee();\n        employee1.setBirthDate(new GregorianCalendar(1999, 0, 1).getTime());\n\n        Employee employee2 = new Employee();\n        employee2.setBirthDate(new GregorianCalendar(2000, 0, 1).getTime());\n\n        when(employeeRepository.findAll()).thenReturn(Arrays.asList(employee1, employee2));\n\n        assert(employeeService.getEmployeesBornBefore2000().size() == 1);\n    }\n}\n\npackage test.core.api.controller;\n\nimport org.junit.jupiter.api.Test;\nimport org.junit.jupiter.api.extension.ExtendWith;\nimport org.mockito.InjectMocks;\nimport org.mockito.Mock;\nimport org.mockito.junit.jupiter.MockitoExtension;\nimport test.core.api.service.EmployeeService;\nimport test.core.api.model.Employee;\n\nimport java.util.Arrays;\n\nimport static org.mockito.Mockito.*;\n\n@ExtendWith(MockitoExtension.class)\npublic class EmployeeControllerTest {\n\n    @InjectMocks\n    private EmployeeController employeeController;\n\n    @Mock\n    private EmployeeService employeeService;\n\n    @Test\n    public void testDeleteEmployee() {\n        doNothing().when(employeeService).deleteEmployee(anyLong());\n        employeeController.deleteEmployee(1L);\n        verify(employeeService, times(1)).deleteEmployee(anyLong());\n    }\n\n    @Test\n    public void testGetEmployeesBornBefore2000() {\n        when(employeeService.getEmployeesBornBefore2000()).thenReturn(Arrays.asList(new Employee()));\n        assert(employeeController.getEmployeesBornBefore2000().size() == 1);\n    }\n}",
+        "refusal": null,
+        "annotations": []
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 1489,
+    "completion_tokens": 958,
+    "total_tokens": 2447,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "audio_tokens": 0,
+      "accepted_prediction_tokens": 0,
+      "rejected_prediction_tokens": 0
+    }
+  },
+  "service_tier": "default",
+  "system_fingerprint": null
+}

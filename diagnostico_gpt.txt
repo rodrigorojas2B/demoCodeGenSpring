@@ -1,0 +1,19 @@
+--- ANÁLISIS DE CLASES EXISTENTES ---
+
+| Clase Java | Package | Clasificación | Motivo |
+|------------|---------|----------------|--------|
+| Employee | test.core.api.model | REUTILIZABLE-AS-IS | Contiene atributo `gender` y `birthDate` necesarios para las historias de usuario |
+| EmployeeRepository | test.core.api.repository | REUTILIZABLE-AS-IS | Se necesita para realizar operaciones de base de datos en la entidad Employee |
+| EmployeeCoreApiApplication | test.core.api | REUTILIZABLE-AS-IS | Clase principal de la aplicación, no necesita modificaciones |
+| EmployeeService | NUEVA | NUEVA | Se necesita para implementar la lógica de negocio relacionada con las historias de usuario |
+| EmployeeController | NUEVA | NUEVA | Se necesita para exponer los endpoints requeridos por las historias de usuario |
+| CannotDeleteEmployeeException | NUEVA | NUEVA | Se necesita para lanzar una excepción cuando se intenta eliminar un empleado femenino |
+| EmployeeServiceTest | NUEVA | NUEVA | Se necesita para realizar pruebas unitarias en la lógica de negocio de EmployeeService |
+| EmployeeControllerTest | NUEVA | NUEVA | Se necesita para realizar pruebas unitarias en los endpoints de EmployeeController |
+
+--- INSTRUCCIONES DE MODIFICACIÓN ---
+- Crear la clase EmployeeService en el paquete test.core.api.service. Esta clase debe contener la lógica de negocio para prevenir la eliminación de empleados femeninos y obtener una lista de empleados nacidos antes del año 2000.
+- Crear la clase EmployeeController en el paquete test.core.api.controller. Esta clase debe contener los endpoints para prevenir la eliminación de empleados femeninos y obtener una lista de empleados nacidos antes del año 2000.
+- Crear la clase CannotDeleteEmployeeException en el paquete test.core.api.exception. Esta clase debe ser una excepción personalizada que se lanzará cuando se intente eliminar un empleado femenino.
+- Crear la clase EmployeeServiceTest en el paquete test.core.api.service. Esta clase debe contener pruebas unitarias para la lógica de negocio en EmployeeService.
+- Crear la clase EmployeeControllerTest en el paquete test.core.api.controller. Esta clase debe contener pruebas unitarias para los endpoints en EmployeeController.

@@ -1,0 +1,36 @@
+{
+  "id": "chatcmpl-BghZR5I1LLg17bJ66Dk5GiSIgRgqr",
+  "object": "chat.completion",
+  "created": 1749516961,
+  "model": "gpt-4-0613",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "--- ANÁLISIS DE CLASES EXISTENTES ---\n\n| Clase Java | Package | Clasificación | Motivo |\n|------------|---------|----------------|--------|\n| Employee | test.core.api.model | REUTILIZABLE-AS-IS | Contiene atributo `gender` y `birthDate` necesarios para las historias de usuario |\n| EmployeeRepository | test.core.api.repository | REUTILIZABLE-AS-IS | Se necesita para realizar operaciones de base de datos en la entidad Employee |\n| EmployeeCoreApiApplication | test.core.api | REUTILIZABLE-AS-IS | Clase principal de la aplicación, no necesita modificaciones |\n| EmployeeService | NUEVA | NUEVA | Se necesita para implementar la lógica de negocio relacionada con las historias de usuario |\n| EmployeeController | NUEVA | NUEVA | Se necesita para exponer los endpoints requeridos por las historias de usuario |\n| CannotDeleteEmployeeException | NUEVA | NUEVA | Se necesita para lanzar una excepción cuando se intenta eliminar un empleado femenino |\n| EmployeeServiceTest | NUEVA | NUEVA | Se necesita para realizar pruebas unitarias en la lógica de negocio de EmployeeService |\n| EmployeeControllerTest | NUEVA | NUEVA | Se necesita para realizar pruebas unitarias en los endpoints de EmployeeController |\n\n--- INSTRUCCIONES DE MODIFICACIÓN ---\n- Crear la clase EmployeeService en el paquete test.core.api.service. Esta clase debe contener la lógica de negocio para prevenir la eliminación de empleados femeninos y obtener una lista de empleados nacidos antes del año 2000.\n- Crear la clase EmployeeController en el paquete test.core.api.controller. Esta clase debe contener los endpoints para prevenir la eliminación de empleados femeninos y obtener una lista de empleados nacidos antes del año 2000.\n- Crear la clase CannotDeleteEmployeeException en el paquete test.core.api.exception. Esta clase debe ser una excepción personalizada que se lanzará cuando se intente eliminar un empleado femenino.\n- Crear la clase EmployeeServiceTest en el paquete test.core.api.service. Esta clase debe contener pruebas unitarias para la lógica de negocio en EmployeeService.\n- Crear la clase EmployeeControllerTest en el paquete test.core.api.controller. Esta clase debe contener pruebas unitarias para los endpoints en EmployeeController.",
+        "refusal": null,
+        "annotations": []
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 1543,
+    "completion_tokens": 522,
+    "total_tokens": 2065,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "audio_tokens": 0,
+      "accepted_prediction_tokens": 0,
+      "rejected_prediction_tokens": 0
+    }
+  },
+  "service_tier": "default",
+  "system_fingerprint": null
+}

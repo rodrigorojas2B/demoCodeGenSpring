@@ -1,5 +1,4 @@
 package test.core.api.model;
-
 import java.io.Serializable;
 import java.time.LocalDate;
 import javax.persistence.Entity;
@@ -7,20 +6,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
 @Entity
 @Table(name = "employee")
 public class Employee implements Serializable {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
 	private String firstName;
 	private String middleName;
 	private String lastName;
@@ -83,8 +75,4 @@ public class Employee implements Serializable {
 	public void setPosition(String position) {
 		this.position = position;
 	}
-	
-	
-	
-
 }
