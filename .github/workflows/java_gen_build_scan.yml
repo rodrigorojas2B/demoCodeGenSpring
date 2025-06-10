@@ -807,3 +807,33 @@ jobs:
           git remote set-url origin https://x-access-token:${GH_PAT}@github.com/${{ github.repository }}.git
           git push origin main
       
+      - name: Generar archivo Swagger (OpenAPI)
+        working-directory: repositorio-base
+        run: |
+          echo "🚀 Levantando la aplicación en segundo plano..."
+          nohup mvn spring-boot:run > app.log 2>&1 &
+          sleep 25  # ⏳ Espera a que levante
+      
+          echo "📄 Generando archivo Swagger..."
+          mvn springdoc-openapi:generate
+      
+          echo "✅ Archivo generado:"
+          ls -lh target/openapi.*
+
+      - name: Subir archivo Swagger generado
+        working-directory: repositorio-base
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add target/openapi.json || true
+
+          if git diff --cached --quiet; then
+            echo "⚠️ No hay cambios en el archivo Swagger, no se realiza commit."
+          else
+            git commit -m "🧾 Swagger actualizado automáticamente"
+            git push origin main
+          fi
+
+        
