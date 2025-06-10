@@ -107,27 +107,29 @@
       <artifactId>sonar-maven-plugin</artifactId>
       <version>3.9.1.2184</version>
     </plugin>
+
+	<plugin>
+		<groupId>org.springdoc</groupId>
+		<artifactId>springdoc-openapi-maven-plugin</artifactId>
+		<version>1.7.0</version>
+		<executions>
+			<execution>
+			<id>generate-openapi-doc</id>
+			<goals>
+				<goal>generate</goal>
+			</goals>
+			<phase>compile</phase>
+			<configuration>
+				<outputFileName>openapi</outputFileName>
+				<outputDir>${project.build.directory}</outputDir>
+				<apiDocsUrl>http://localhost:8080/v3/api-docs</apiDocsUrl>
+			</configuration>
+			</execution>
+		</executions>
+	</plugin>
   </plugins>
 
-  <plugin>
-	<groupId>org.springdoc</groupId>
-	<artifactId>springdoc-openapi-maven-plugin</artifactId>
-	<version>1.7.0</version>
-	<executions>
-		<execution>
-		<id>generate-openapi-doc</id>
-		<goals>
-			<goal>generate</goal>
-		</goals>
-		<phase>compile</phase>
-		<configuration>
-			<outputFileName>openapi</outputFileName>
-			<outputDir>${project.build.directory}</outputDir>
-			<apiDocsUrl>http://localhost:8080/v3/api-docs</apiDocsUrl>
-		</configuration>
-		</execution>
-	</executions>
-	</plugin>
+
 
 </build>
 
