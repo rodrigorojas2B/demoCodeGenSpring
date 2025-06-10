@@ -182,6 +182,7 @@ jobs:
           - Asegurate que el el código generado sea compilable, corríjelo hasta que lo sea
           - Nunca uses el método stream() u otros métodos que pueden ser ambiguos entre versiones de Java.
           - Siempre importa las clases que uses dentro de otra clase, valida siempre que clase clase utilizada tenga su import correspondiente.
+          - Cuando asignes el resultado de un método a una variable siempre los tipos de la variable y el método deben ser compatibles.  Por ejemplo, no trates de asignar un método que retorna Iterable a una variable de tipo List.
           EOF
 
 
