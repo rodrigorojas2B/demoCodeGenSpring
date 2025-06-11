@@ -518,6 +518,29 @@ jobs:
             echo "🧽 Ajustando para que el primer package sea la primera línea útil..."
             awk 'BEGIN{found=0} /^\s*package /{found=1} found' clases_generadas.java > clases_generadas_limpio.java
             mv clases_generadas_limpio.java clases_generadas.java
+
+            echo "🧹 Limpiando residuos de formato GPT..."
+            sed -i '/^---/d' clases_generadas.java
+            sed -i '/^```/d' clases_generadas.java
+            sed -i '/^# .*$/d' clases_generadas.java
+            sed -i '/^\/\/ Clase de prueba:/d' clases_generadas.java
+            sed -i '/^\/\/ Clase modificada:/d' clases_generadas.java
+            sed -i '/^\/\/ Resto de los métodos existentes\.{3}/d' clases_generadas.java
+            sed -i '/^--- CLASE MODIFICADA ---/d' clases_generadas.java
+            sed -i '/^--- ARCHIVO:/d' clases_generadas.java
+            sed -i '/^[0-9]+\.\s+Clase/d' clases_generadas.java
+            sed -i '/^[0-9]+\.\s+Pruebas/d' clases_generadas.java
+            sed -i '/^.*Clase.*nueva.*$/d' clases_generadas.java
+            sed -i '/^.*Pruebas.*$/d' clases_generadas.java
+            sed -i '/\b(Esta clase|Este método|En este código|En esta clase|Ahora|Se ha modificado)\b/d' clases_generadas.java
+            sed -i '/\b(Esto|Este cambio|Por lo tanto|Finalmente|Luego|Entonces)\b.*\./d' clases_generadas.java
+            sed -i '/^[[:space:]]*$/d' clases_generadas.java
+            sed -i '/^\s*$/d' clases_generadas.java
+
+            echo "🧽 Ajustando para que el primer package sea la primera línea útil..."
+            awk 'BEGIN{found=0} /^\s*package /{found=1} found' clases_generadas.java > clases_generadas_limpio.java
+            mv clases_generadas_limpio.java clases_generadas.java
+
       
             echo "📂 Separando clases en archivos individuales..."
             rm -f clase_*.java
