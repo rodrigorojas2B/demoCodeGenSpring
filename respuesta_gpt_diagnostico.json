@@ -1,0 +1,36 @@
+{
+  "id": "chatcmpl-BhHslr2cVqSYcCkqhl1Ri9VgMrMMV",
+  "object": "chat.completion",
+  "created": 1749656543,
+  "model": "gpt-4-0613",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "--- ANÁLISIS DE CLASES EXISTENTES ---\n\n| Clase Java | Package | Clasificación | Motivo |\n|------------|---------|----------------|--------|\n| Employee | test.core.api.model | REUTILIZABLE-AS-IS | Contiene atributos necesarios para las historias de usuario |\n| EmployeeRepository | test.core.api.repository | REUTILIZABLE-AS-IS | Se necesita para realizar operaciones CRUD en la base de datos |\n| EmployeeCoreApiApplication | test.core.api | REUTILIZABLE-AS-IS | Clase principal de la aplicación |\n| EmployeeService | N/A | NUEVA | Se necesita para implementar la lógica de negocio |\n| EmployeeController | N/A | NUEVA | Se necesita para exponer los endpoints requeridos |\n| EmployeeServiceException | N/A | NUEVA | Se necesita para manejar excepciones personalizadas |\n| EmployeeServiceTest | N/A | NUEVA | Se necesita para realizar pruebas unitarias |\n| EmployeeControllerTest | N/A | NUEVA | Se necesita para realizar pruebas de integración |\n\n--- INSTRUCCIONES DE MODIFICACIÓN ---\n1. Crear la clase `EmployeeService` en el paquete `test.core.api.service` con los métodos `deleteEmployee(Long id)`, `getEmployeesBornBefore2000()`, y `getEmployeesGroupedByPosition()`.\n2. Modificar el método `deleteEmployee(Long id)` para lanzar una excepción `EmployeeServiceException` si el empleado a eliminar es de género femenino.\n3. Crear la clase `EmployeeController` en el paquete `test.core.api.controller` con los endpoints `deleteEmployee(Long id)`, `getEmployeesBornBefore2000()`, y `getEmployeesGroupedByPosition()`.\n4. Crear la clase `EmployeeServiceException` en el paquete `test.core.api.exception` para manejar las excepciones personalizadas.\n5. Crear la clase `EmployeeServiceTest` en el paquete `test.core.api.service` para realizar pruebas unitarias en los métodos de `EmployeeService`.\n6. Crear la clase `EmployeeControllerTest` en el paquete `test.core.api.controller` para realizar pruebas de integración en los endpoints de `EmployeeController`.",
+        "refusal": null,
+        "annotations": []
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 1685,
+    "completion_tokens": 480,
+    "total_tokens": 2165,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "audio_tokens": 0,
+      "accepted_prediction_tokens": 0,
+      "rejected_prediction_tokens": 0
+    }
+  },
+  "service_tier": "default",
+  "system_fingerprint": null
+}
